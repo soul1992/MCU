@@ -1,0 +1,539 @@
+C51 COMPILER V9.01   DS1302                                                                01/30/2025 23:13:32 PAGE 1   
+
+
+C51 COMPILER V9.01, COMPILATION OF MODULE DS1302
+OBJECT MODULE PLACED IN DS1302.OBJ
+COMPILER INVOKED BY: H:\KeilC51\C51\BIN\C51.EXE DS1302.c BROWSE DEBUG OBJECTEXTEND
+
+line level    source
+
+   1          #include "ds1302.h"
+   2          unsigned char temp_miao;
+   3          sbit ACC0=ACC^0;
+   4          sbit ACC7=ACC^7;
+   5          /************************************************************
+   6          ACC累加器=A
+   7          ACC.0=E0H 
+   8          
+   9          ACC.0就是ACC的第0位。Acc可以位寻址。
+  10          
+  11          累加器ACC是一个8位的存储单元，是用来放数据的。但是，这个存储单元有其特殊的地位，
+  12          是单片机中一个非常关键的单元，很多运算都要通过ACC来进行。以后在学习指令时，
+  13          常用A来表示累加器。但有一些地方例外，比如在PUSH指令中，就必须用ACC这样的名字。
+  14          一般的说法，A代表了累加器中的内容、而ACC代表的是累加器的地址。 
+  15          ***************************************************************/
+  16          //bit timerOn=0;                                                        //闹钟启用标志位
+  17          ////bit baoshi=0;                                                       //整点报时标志位
+  18          //uchar shangyimiao,bsn,temp_hour;                      //记录上一秒时间
+  19          //bit  p_r=0;                                                           //平年/润年  =0表示平年，=1表示润年
+  20          data uchar year_moon,month_moon,day_moon;
+  21          char a,week;
+  22          //********阳历转换阴历表************************************
+  23          code uchar year_code[597]={
+  24                              0x04,0xAe,0x53,    //1901 0
+  25                              0x0A,0x57,0x48,    //1902 3
+  26                              0x55,0x26,0xBd,    //1903 6
+  27                              0x0d,0x26,0x50,    //1904 9
+  28                              0x0d,0x95,0x44,    //1905 12
+  29                              0x46,0xAA,0xB9,    //1906 15
+  30                              0x05,0x6A,0x4d,    //1907 18
+  31                              0x09,0xAd,0x42,    //1908 21
+  32                              0x24,0xAe,0xB6,    //1909
+  33                              0x04,0xAe,0x4A,    //1910
+  34                              0x6A,0x4d,0xBe,    //1911
+  35                              0x0A,0x4d,0x52,    //1912
+  36                              0x0d,0x25,0x46,    //1913
+  37                              0x5d,0x52,0xBA,    //1914
+  38                              0x0B,0x54,0x4e,    //1915
+  39                              0x0d,0x6A,0x43,    //1916
+  40                              0x29,0x6d,0x37,    //1917
+  41                              0x09,0x5B,0x4B,    //1918
+  42                              0x74,0x9B,0xC1,    //1919
+  43                              0x04,0x97,0x54,    //1920
+  44                              0x0A,0x4B,0x48,    //1921
+  45                              0x5B,0x25,0xBC,    //1922
+  46                              0x06,0xA5,0x50,    //1923
+  47                              0x06,0xd4,0x45,    //1924
+  48                              0x4A,0xdA,0xB8,    //1925
+  49                              0x02,0xB6,0x4d,    //1926
+  50                              0x09,0x57,0x42,    //1927
+  51                              0x24,0x97,0xB7,    //1928
+  52                              0x04,0x97,0x4A,    //1929
+  53                              0x66,0x4B,0x3e,    //1930
+  54                              0x0d,0x4A,0x51,    //1931
+  55                              0x0e,0xA5,0x46,    //1932
+C51 COMPILER V9.01   DS1302                                                                01/30/2025 23:13:32 PAGE 2   
+
+  56                              0x56,0xd4,0xBA,    //1933
+  57                              0x05,0xAd,0x4e,    //1934
+  58                              0x02,0xB6,0x44,    //1935
+  59                              0x39,0x37,0x38,    //1936
+  60                              0x09,0x2e,0x4B,    //1937
+  61                              0x7C,0x96,0xBf,    //1938
+  62                              0x0C,0x95,0x53,    //1939
+  63                              0x0d,0x4A,0x48,    //1940
+  64                              0x6d,0xA5,0x3B,    //1941
+  65                              0x0B,0x55,0x4f,    //1942
+  66                              0x05,0x6A,0x45,    //1943
+  67                              0x4A,0xAd,0xB9,    //1944
+  68                              0x02,0x5d,0x4d,    //1945
+  69                              0x09,0x2d,0x42,    //1946
+  70                              0x2C,0x95,0xB6,    //1947
+  71                              0x0A,0x95,0x4A,    //1948
+  72                              0x7B,0x4A,0xBd,    //1949
+  73                              0x06,0xCA,0x51,    //1950
+  74                              0x0B,0x55,0x46,    //1951
+  75                              0x55,0x5A,0xBB,    //1952
+  76                              0x04,0xdA,0x4e,    //1953
+  77                              0x0A,0x5B,0x43,    //1954
+  78                              0x35,0x2B,0xB8,    //1955
+  79                              0x05,0x2B,0x4C,    //1956
+  80                              0x8A,0x95,0x3f,    //1957
+  81                              0x0e,0x95,0x52,    //1958
+  82                              0x06,0xAA,0x48,    //1959
+  83                              0x7A,0xd5,0x3C,    //1960
+  84                              0x0A,0xB5,0x4f,    //1961
+  85                              0x04,0xB6,0x45,    //1962
+  86                              0x4A,0x57,0x39,    //1963
+  87                              0x0A,0x57,0x4d,    //1964
+  88                              0x05,0x26,0x42,    //1965
+  89                              0x3e,0x93,0x35,    //1966
+  90                              0x0d,0x95,0x49,    //1967
+  91                              0x75,0xAA,0xBe,    //1968
+  92                              0x05,0x6A,0x51,    //1969
+  93                              0x09,0x6d,0x46,    //1970
+  94                              0x54,0xAe,0xBB,    //1971
+  95                              0x04,0xAd,0x4f,    //1972
+  96                              0x0A,0x4d,0x43,    //1973
+  97                              0x4d,0x26,0xB7,    //1974
+  98                              0x0d,0x25,0x4B,    //1975
+  99                              0x8d,0x52,0xBf,    //1976
+ 100                              0x0B,0x54,0x52,    //1977
+ 101                              0x0B,0x6A,0x47,    //1978
+ 102                              0x69,0x6d,0x3C,    //1979
+ 103                              0x09,0x5B,0x50,    //1980
+ 104                              0x04,0x9B,0x45,    //1981
+ 105                              0x4A,0x4B,0xB9,    //1982
+ 106                              0x0A,0x4B,0x4d,    //1983
+ 107                              0xAB,0x25,0xC2,    //1984
+ 108                              0x06,0xA5,0x54,    //1985
+ 109                              0x06,0xd4,0x49,    //1986
+ 110                              0x6A,0xdA,0x3d,    //1987
+ 111                              0x0A,0xB6,0x51,    //1988
+ 112                              0x09,0x37,0x46,    //1989
+ 113                              0x54,0x97,0xBB,    //1990
+ 114                              0x04,0x97,0x4f,    //1991
+ 115                              0x06,0x4B,0x44,    //1992
+ 116                              0x36,0xA5,0x37,    //1993
+ 117                              0x0e,0xA5,0x4A,    //1994
+C51 COMPILER V9.01   DS1302                                                                01/30/2025 23:13:32 PAGE 3   
+
+ 118                              0x86,0xB2,0xBf,    //1995
+ 119                              0x05,0xAC,0x53,    //1996
+ 120                              0x0A,0xB6,0x47,    //1997
+ 121                              0x59,0x36,0xBC,    //1998
+ 122                              0x09,0x2e,0x50,    //1999 294
+ 123                              0x0C,0x96,0x45,    //2000 297
+ 124                              0x4d,0x4A,0xB8,    //2001
+ 125                              0x0d,0x4A,0x4C,    //2002
+ 126                              0x0d,0xA5,0x41,    //2003
+ 127                              0x25,0xAA,0xB6,    //2004
+ 128                              0x05,0x6A,0x49,    //2005
+ 129                              0x7A,0xAd,0xBd,    //2006
+ 130                              0x02,0x5d,0x52,    //2007
+ 131                              0x09,0x2d,0x47,    //2008
+ 132                              0x5C,0x95,0xBA,    //2009
+ 133                              0x0A,0x95,0x4e,    //2010
+ 134                              0x0B,0x4A,0x43,    //2011
+ 135                              0x4B,0x55,0x37,    //2012
+ 136                              0x0A,0xd5,0x4A,    //2013
+ 137                              0x95,0x5A,0xBf,    //2014
+ 138                              0x04,0xBA,0x53,    //2015
+ 139                              0x0A,0x5B,0x48,    //2016
+ 140                              0x65,0x2B,0xBC,    //2017
+ 141                              0x05,0x2B,0x50,    //2018
+ 142                              0x0A,0x93,0x45,    //2019
+ 143                              0x47,0x4A,0xB9,    //2020
+ 144                              0x06,0xAA,0x4C,    //2021
+ 145                              0x0A,0xd5,0x41,    //2022
+ 146                              0x24,0xdA,0xB6,    //2023
+ 147                              0x04,0xB6,0x4A,    //2024
+ 148                              0x69,0x57,0x3d,    //2025
+ 149                              0x0A,0x4e,0x51,    //2026
+ 150                              0x0d,0x26,0x46,    //2027
+ 151                              0x5e,0x93,0x3A,    //2028
+ 152                              0x0d,0x53,0x4d,    //2029
+ 153                              0x05,0xAA,0x43,    //2030
+ 154                              0x36,0xB5,0x37,    //2031
+ 155                              0x09,0x6d,0x4B,    //2032
+ 156                              0xB4,0xAe,0xBf,    //2033
+ 157                              0x04,0xAd,0x53,    //2034
+ 158                              0x0A,0x4d,0x48,    //2035
+ 159                              0x6d,0x25,0xBC,    //2036
+ 160                              0x0d,0x25,0x4f,    //2037
+ 161                              0x0d,0x52,0x44,    //2038
+ 162                              0x5d,0xAA,0x38,    //2039
+ 163                              0x0B,0x5A,0x4C,    //2040
+ 164                              0x05,0x6d,0x41,    //2041
+ 165                              0x24,0xAd,0xB6,    //2042
+ 166                              0x04,0x9B,0x4A,    //2043
+ 167                              0x7A,0x4B,0xBe,    //2044
+ 168                              0x0A,0x4B,0x51,    //2045
+ 169                              0x0A,0xA5,0x46,    //2046
+ 170                              0x5B,0x52,0xBA,    //2047
+ 171                              0x06,0xd2,0x4e,    //2048
+ 172                              0x0A,0xdA,0x42,    //2049
+ 173                              0x35,0x5B,0x37,    //2050
+ 174                              0x09,0x37,0x4B,    //2051
+ 175                              0x84,0x97,0xC1,    //2052
+ 176                              0x04,0x97,0x53,    //2053
+ 177                              0x06,0x4B,0x48,    //2054
+ 178                              0x66,0xA5,0x3C,    //2055
+ 179                              0x0e,0xA5,0x4f,    //2056
+C51 COMPILER V9.01   DS1302                                                                01/30/2025 23:13:32 PAGE 4   
+
+ 180                              0x06,0xB2,0x44,    //2057
+ 181                              0x4A,0xB6,0x38,    //2058
+ 182                              0x0A,0xAe,0x4C,    //2059
+ 183                              0x09,0x2e,0x42,    //2060
+ 184                              0x3C,0x97,0x35,    //2061
+ 185                              0x0C,0x96,0x49,    //2062
+ 186                              0x7d,0x4A,0xBd,    //2063
+ 187                              0x0d,0x4A,0x51,    //2064
+ 188                              0x0d,0xA5,0x45,    //2065
+ 189                              0x55,0xAA,0xBA,    //2066
+ 190                              0x05,0x6A,0x4e,    //2067
+ 191                              0x0A,0x6d,0x43,    //2068
+ 192                              0x45,0x2e,0xB7,    //2069
+ 193                              0x05,0x2d,0x4B,    //2070
+ 194                              0x8A,0x95,0xBf,    //2071
+ 195                              0x0A,0x95,0x53,    //2072
+ 196                              0x0B,0x4A,0x47,    //2073
+ 197                              0x6B,0x55,0x3B,    //2074
+ 198                              0x0A,0xd5,0x4f,    //2075
+ 199                              0x05,0x5A,0x45,    //2076
+ 200                              0x4A,0x5d,0x38,    //2077
+ 201                              0x0A,0x5B,0x4C,    //2078
+ 202                              0x05,0x2B,0x42,    //2079
+ 203                              0x3A,0x93,0xB6,    //2080
+ 204                              0x06,0x93,0x49,    //2081
+ 205                              0x77,0x29,0xBd,    //2082
+ 206                              0x06,0xAA,0x51,    //2083
+ 207                              0x0A,0xd5,0x46,    //2084
+ 208                              0x54,0xdA,0xBA,    //2085
+ 209                              0x04,0xB6,0x4e,    //2086
+ 210                              0x0A,0x57,0x43,    //2087
+ 211                              0x45,0x27,0x38,    //2088
+ 212                              0x0d,0x26,0x4A,    //2089
+ 213                              0x8e,0x93,0x3e,    //2090
+ 214                              0x0d,0x52,0x52,    //2091
+ 215                              0x0d,0xAA,0x47,    //2092
+ 216                              0x66,0xB5,0x3B,    //2093
+ 217                              0x05,0x6d,0x4f,    //2094
+ 218                              0x04,0xAe,0x45,    //2095
+ 219                              0x4A,0x4e,0xB9,    //2096
+ 220                              0x0A,0x4d,0x4C,    //2097
+ 221                              0x0d,0x15,0x41,    //2098
+ 222                              0x2d,0x92,0xB5,    //2099
+ 223          };
+ 224          
+ 225          ///月份数据表
+ 226          code uchar day_code1[9]={0x0,0x1f,0x3b,0x5a,0x78,0x97,0xb5,0xd4,0xf3};
+ 227          code uint day_code2[3]={0x111,0x130,0x14e};
+ 228          
+ 229          /*
+ 230          函数功能:输入BCD阳历数据,输出BCD阴历数据(只允许1901-2099年)
+ 231          调用函数示例:Conversion(c_sun,year_sun,month_sun,day_sun)
+ 232          如:计算2004年10月16日Conversion(0,0x4,0x10,0x16);
+ 233          c_sun,year_sun,month_sun,day_sun均为BCD数据,c_sun为世纪标志位,c_sun=0为21世
+ 234          纪,c_sun=1为19世纪
+ 235          调用函数后,原有数据不变,读c_moon,year_moon,month_moon,day_moon得出阴历BCD数据
+ 236          */
+ 237          
+ 238          bit c_moon;
+ 239          //子函数,用于读取数据表中农历月的大月或小月,如果该月为大返回1,为小返回0
+ 240          bit get_moon_day(uchar month_p,uint table_addr)
+ 241          {
+C51 COMPILER V9.01   DS1302                                                                01/30/2025 23:13:32 PAGE 5   
+
+ 242   1              uchar temp10;
+ 243   1          switch (month_p){
+ 244   2              case 1:{temp10=year_code[table_addr]&0x08;
+ 245   3                   if (temp10==0)return(0);else return(1);}
+ 246   2              case 2:{temp10=year_code[table_addr]&0x04;
+ 247   3                   if (temp10==0)return(0);else return(1);}
+ 248   2              case 3:{temp10=year_code[table_addr]&0x02;
+ 249   3                   if (temp10==0)return(0);else return(1);}
+ 250   2              case 4:{temp10=year_code[table_addr]&0x01;
+ 251   3                   if (temp10==0)return(0);else return(1);}
+ 252   2              case 5:{temp10=year_code[table_addr+1]&0x80;
+ 253   3                   if (temp10==0) return(0);else return(1);}
+ 254   2              case 6:{temp10=year_code[table_addr+1]&0x40;
+ 255   3                   if (temp10==0)return(0);else return(1);}
+ 256   2              case 7:{temp10=year_code[table_addr+1]&0x20;
+ 257   3                   if (temp10==0)return(0);else return(1);}
+ 258   2              case 8:{temp10=year_code[table_addr+1]&0x10;
+ 259   3                   if (temp10==0)return(0);else return(1);}
+ 260   2              case 9:{temp10=year_code[table_addr+1]&0x08;
+ 261   3                   if (temp10==0)return(0);else return(1);}
+ 262   2              case 10:{temp10=year_code[table_addr+1]&0x04;
+ 263   3                   if (temp10==0)return(0);else return(1);}
+ 264   2              case 11:{temp10=year_code[table_addr+1]&0x02;
+ 265   3                   if (temp10==0)return(0);else return(1);}
+ 266   2              case 12:{temp10=year_code[table_addr+1]&0x01;
+ 267   3                   if (temp10==0)return(0);else return(1);}
+ 268   2              case 13:{temp10=year_code[table_addr+2]&0x80;
+ 269   3                   if (temp10==0)return(0);else return(1);}
+ 270   2                      default:return(2);
+ 271   2          }
+ 272   1      }
+ 273          
+ 274          /*
+ 275          函数功能:输入BCD阳历数据,输出BCD阴历数据(只允许1901-2099年)
+ 276          调用函数示例:Conversion(c_sun,year_sun,month_sun,day_sun)
+ 277          如:计算2004年10月16日Conversion(0,0x4,0x10,0x16);
+ 278          c_sun,year_sun,month_sun,day_sun均为BCD数据,c_sun为世纪标志位,c_sun=0为21世
+ 279          纪,c_sun=1为19世纪
+ 280          调用函数后,原有数据不变,读c_moon,year_moon,month_moon,day_moon得出阴历BCD数据
+ 281          */
+ 282          
+ 283          void Conversion(bit c,uchar year,uchar month,uchar day)
+ 284          {                         //c=0 为21世纪,c=1 为19世纪 输入输出数据均为BCD数据
+ 285   1          uchar temp1,temp2,temp3,month_p;
+ 286   1          uint temp4,table_addr;
+ 287   1          bit flag2,flag_y;
+ 288   1          temp1=year/16;   //BCD->hex 先把数据转换为十六进制
+ 289   1          temp2=year%16;
+ 290   1         // year=temp1*10+temp2;
+ 291   1              year=temp1*16+temp2;
+ 292   1          temp1=month/16;
+ 293   1          temp2=month%16;
+ 294   1          //month=temp1*10+temp2;
+ 295   1              month=temp1*16+temp2;
+ 296   1          temp1=day/16;
+ 297   1          temp2=day%16;
+ 298   1          //day=temp1*10+temp2;
+ 299   1              day=temp1*16+temp2;
+ 300   1          //定位数据表地址
+ 301   1          if(c==0){                   
+ 302   2              table_addr=(year+0x64-1)*0x3;
+ 303   2          }
+C51 COMPILER V9.01   DS1302                                                                01/30/2025 23:13:32 PAGE 6   
+
+ 304   1          else {
+ 305   2              table_addr=(year-1)*0x3;
+ 306   2          }
+ 307   1          //定位数据表地址完成
+ 308   1          //取当年春节所在的公历月份
+ 309   1          temp1=year_code[table_addr+2]&0x60; 
+ 310   1          temp1=_cror_(temp1,5);
+ 311   1          //取当年春节所在的公历月份完成
+ 312   1          //取当年春节所在的公历日
+ 313   1          temp2=year_code[table_addr+2]&0x1f; 
+ 314   1          //取当年春节所在的公历日完成
+ 315   1          // 计算当年春年离当年元旦的天数,春节只会在公历1月或2月
+ 316   1          if(temp1==0x1){  
+ 317   2              temp3=temp2-1;  
+ 318   2          }  
+ 319   1          else{
+ 320   2              temp3=temp2+0x1f-1;        
+ 321   2          }
+ 322   1          // 计算当年春年离当年元旦的天数完成
+ 323   1          //计算公历日离当年元旦的天数,为了减少运算,用了两个表
+ 324   1          //day_code1[9],day_code2[3]
+ 325   1          //如果公历月在九月或前,天数会少于0xff,用表day_code1[9],
+ 326   1          //在九月后,天数大于0xff,用表day_code2[3]
+ 327   1          //如输入公历日为8月10日,则公历日离元旦天数为day_code1[8-1]+10-1
+ 328   1          //如输入公历日为11月10日,则公历日离元旦天数为day_code2[11-10]+10-1
+ 329   1          if (month<10){ 
+ 330   2              temp4=day_code1[month-1]+day-1;
+ 331   2          }
+ 332   1          else{
+ 333   2              temp4=day_code2[month-10]+day-1;
+ 334   2          }
+ 335   1          if ((month>0x2)&&(year%0x4==0)){  //如果公历月大于2月并且该年的2月为闰月,天数加1
+ 336   2              temp4+=1;
+ 337   2          }
+ 338   1          //计算公历日离当年元旦的天数完成
+ 339   1          //判断公历日在春节前还是春节后
+ 340   1          if (temp4>=temp3){ //公历日在春节后或就是春节当日使用下面代码进行运算
+ 341   2              temp4-=temp3;
+ 342   2              month=0x1;
+ 343   2              month_p=0x1;  //month_p为月份指向,公历日在春节前或就是春节当日month_p指向首月
+ 344   2              flag2=get_moon_day(month_p,table_addr); //检查该农历月为大小还是小月,大月返回1,小月返回0
+ 345   2              flag_y=0;
+ 346   2              if(flag2==0)temp1=0x1d; //小月29天
+ 347   2              else temp1=0x1e; //大小30天
+ 348   2              temp2=year_code[table_addr]&0xf0;
+ 349   2              temp2=_cror_(temp2,4);  //从数据表中取该年的闰月月份,如为0则该年无闰月
+ 350   2              while(temp4>=temp1){
+ 351   3                  temp4-=temp1;
+ 352   3                  month_p+=1;
+ 353   3                  if(month==temp2){
+ 354   4                  flag_y=~flag_y;
+ 355   4                  if(flag_y==0)month+=1;
+ 356   4                  }
+ 357   3                  else month+=1;
+ 358   3                  flag2=get_moon_day(month_p,table_addr);
+ 359   3                  if(flag2==0)temp1=0x1d;
+ 360   3                  else temp1=0x1e;
+ 361   3              }
+ 362   2              day=temp4+1;
+ 363   2          }
+ 364   1          else{  //公历日在春节前使用下面代码进行运算
+ 365   2              temp3-=temp4;
+C51 COMPILER V9.01   DS1302                                                                01/30/2025 23:13:32 PAGE 7   
+
+ 366   2              if (year==0x0){year=0x63;c=1;}
+ 367   2              else year-=1;
+ 368   2              table_addr-=0x3;
+ 369   2              month=0xc;
+ 370   2              temp2=year_code[table_addr]&0xf0;
+ 371   2              temp2=_cror_(temp2,4);
+ 372   2              if (temp2==0)
+ 373   2                              month_p=0xc; 
+ 374   2              else
+ 375   2                              month_p=0xd; //
+ 376   2              
+ 377   2               //month_p为月份指向,如果当年有闰月,一年有十三个月,月指向13,无闰月指向12
+ 378   2              
+ 379   2              flag_y=0;
+ 380   2              flag2=get_moon_day(month_p,table_addr);
+ 381   2              if(flag2==0)temp1=0x1d;
+ 382   2              else temp1=0x1e;
+ 383   2              while(temp3>temp1){
+ 384   3                  temp3-=temp1;
+ 385   3                  month_p-=1;
+ 386   3                  if(flag_y==0)month-=1;
+ 387   3                  if(month==temp2)flag_y=~flag_y;
+ 388   3                  flag2=get_moon_day(month_p,table_addr);
+ 389   3                  if(flag2==0)temp1=0x1d;
+ 390   3                  else temp1=0x1e;
+ 391   3               }
+ 392   2              day=temp1-temp3+1;
+ 393   2          }
+ 394   1          c_moon=c;                 //HEX->BCD ,运算结束后,把数据转换为BCD数据
+ 395   1          temp1=year/10;
+ 396   1          temp1=_crol_(temp1,4);
+ 397   1          temp2=year%10;
+ 398   1          year_moon=temp1|temp2;
+ 399   1          temp1=month/10;
+ 400   1          temp1=_crol_(temp1,4);
+ 401   1          temp2=month%10;
+ 402   1          month_moon=temp1|temp2;
+ 403   1          temp1=day/10;
+ 404   1          temp1=_crol_(temp1,4);
+ 405   1          temp2=day%10;
+ 406   1          day_moon=temp1|temp2;
+ 407   1      }
+ 408          
+ 409          
+ 410          /*
+ 411          函数功能:输入BCD阳历数据,输出BCD星期数据(只允许1901-2099年)
+ 412          调用函数示例:Conver_week(c_sun,year_sun,month_sun,day_sun)
+ 413          如:计算2004年10月16日Conversion(0,0x4,0x10,0x16);
+ 414          c_sun,year_sun,month_sun,day_sun均为BCD数据,c_sun为世纪标志位,c_sun=0为21世
+ 415          纪,c_sun=1为19世纪
+ 416          调用函数后,原有数据不变,读week得出阴历BCD数据
+ 417          */
+ 418          code uchar table_week[12]={0,3,3,6,1,4,6,2,5,0,3,5}; //月修正数据表
+ 419          /*
+ 420          算法:日期+年份+所过闰年数+月较正数之和除7 的余数就是星期但如果是在
+ 421          闰年又不到3 月份上述之和要减一天再除7
+ 422          星期数为0
+ 423          */
+ 424          void Conver_week(uchar year,uchar month,uchar day)
+ 425          {//c=0 为21世纪,c=1 为19世纪 输入输出数据均为BCD数据
+ 426   1          uchar p1,p2;
+ 427   1          year+=0x64;  //如果为21世纪,年份数加100
+C51 COMPILER V9.01   DS1302                                                                01/30/2025 23:13:32 PAGE 8   
+
+ 428   1          p1=year/0x4;  //所过闰年数只算1900年之后的
+ 429   1          p2=year+p1;
+ 430   1          p2=p2%0x7;  //为节省资源,先进行一次取余,避免数大于0xff,避免使用整型数据
+ 431   1          p2=p2+day+table_week[month-1];
+ 432   1          if (year%0x4==0&&month<3)p2-=1;
+ 433   1          week=p2%0x7;
+ 434   1      }
+ 435          
+ 436          /***************DS1302有关子函数********************/
+ 437          void write_byte(uchar dat)//写一个字节
+ 438          {
+ 439   1              ACC=dat;
+ 440   1              RST=1;
+ 441   1              for(a=8;a>0;a--)
+ 442   1              {
+ 443   2                      IO=ACC0;
+ 444   2                      SCLK=0;
+ 445   2                      SCLK=1;
+ 446   2                      ACC=ACC>>1;
+ 447   2              }
+ 448   1      }
+ 449          uchar read_byte()//读一个字节
+ 450          {
+ 451   1              RST=1;
+ 452   1              for(a=8;a>0;a--)
+ 453   1              {
+ 454   2                      ACC7=IO;
+ 455   2                      SCLK=1;
+ 456   2                      SCLK=0;
+ 457   2                      ACC=ACC>>1;
+ 458   2              }
+ 459   1              return (ACC);
+ 460   1      }
+ 461          //----------------------------------------
+ 462          void write_1302(uchar add,uchar dat)//向1302芯片写函数，指定写入地址，数据
+ 463          {
+ 464   1              RST=0;
+ 465   1              SCLK=0;
+ 466   1              RST=1;
+ 467   1              write_byte(add);
+ 468   1              write_byte(dat);
+ 469   1              SCLK=1;
+ 470   1              RST=0;
+ 471   1      }
+ 472          uchar read_1302(uchar add)//从1302读数据函数，指定读取数据来源地址
+ 473          {
+ 474   1              uchar temp11;
+ 475   1              RST=0;
+ 476   1              SCLK=0;
+ 477   1              RST=1;
+ 478   1              write_byte(add);
+ 479   1              temp11=read_byte();
+ 480   1              SCLK=1;
+ 481   1              RST=0;
+ 482   1              return(temp11);
+ 483   1      }
+ 484          
+ 485          uchar BCD_Decimal(uchar bcd)//BCD码转十进制函数，输入BCD，返回十进制
+ 486          {
+ 487   1               return((bcd>>4)*10+(bcd&0x0F));
+ 488   1      }
+ 489          
+C51 COMPILER V9.01   DS1302                                                                01/30/2025 23:13:32 PAGE 9   
+
+ 490          //--------------------------------------
+ 491          void ds1302_init() //1302芯片初始化子函数(2010-01-07,12:00:00,week4)
+ 492          {
+ 493   1              RST=0;
+ 494   1              SCLK=0;
+ 495   1              
+ 496   1              write_1302(0x8e,0x00); //允许写，禁止写保护 
+ 497   1              write_1302(0x8e,0x80); //打开写保护
+ 498   1      }
+ 499          
+ 500          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   1045    ----
+   CONSTANT SIZE    =    624    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      6       9
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =      1       3
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

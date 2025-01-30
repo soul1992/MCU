@@ -1,0 +1,85 @@
+C51 COMPILER V9.01   LCD1602                                                               01/30/2025 23:13:32 PAGE 1   
+
+
+C51 COMPILER V9.01, COMPILATION OF MODULE LCD1602
+OBJECT MODULE PLACED IN LCD1602.OBJ
+COMPILER INVOKED BY: H:\KeilC51\C51\BIN\C51.EXE LCD1602.c BROWSE DEBUG OBJECTEXTEND
+
+line level    source
+
+   1          #include"LCD1602.h"
+   2          
+   3          /********液晶写入指令函数与写入数据函数，以后可调用**************/
+   4          #define yh 0x80 //LCD第一行的初始位置,因为LCD1602字符地址首位D7恒定为1（100000000=80）
+   5          #define er 0x80+0x40 //LCD第二行初始位置（因为第二行第一个字符位置地址是0x40）
+   6          //延时函数，后面经常调用
+   7          extern char a;
+   8          
+   9          uchar code tab1[]={"20  -  -   "};      //年显示的固定字符
+  10          uchar code tab2[]={"  :  :  "};         //时间显示的固定字符
+  11          void delay(uint xms)//延时函数，有参函数
+  12          {
+  13   1              uint x,y;
+  14   1              for(x=xms;x>0;x--)
+  15   1               for(y=110;y>0;y--);
+  16   1      }
+  17          
+  18          void write_1602com(uchar com)//****液晶写入指令函数****
+  19          {
+  20   1              rs=0;//数据/指令选择置为指令
+  21   1              rw=0; //读写选择置为写
+  22   1              P0=com;//送入数据
+  23   1              delay(1);
+  24   1              en=1;//拉高使能端，为制造有效的下降沿做准备
+  25   1              delay(1);
+  26   1              en=0;//en由高变低，产生下降沿，液晶执行命令
+  27   1      }
+  28          
+  29          
+  30          void write_1602dat(uchar dat)//***液晶写入数据函数****
+  31          {
+  32   1              rs=1;//数据/指令选择置为数据
+  33   1              rw=0; //读写选择置为写
+  34   1              P0=dat;//送入数据
+  35   1              delay(1);
+  36   1              en=1; //en置高电平，为制造下降沿做准备
+  37   1              delay(1);
+  38   1              en=0; //en由高变低，产生下降沿，液晶执行命令
+  39   1      }
+  40          
+  41          
+  42          void lcd_init()//***液晶初始化函数****
+  43          {
+  44   1              write_1602com(0x38);//设置液晶工作模式，意思：16*2行显示，5*7点阵，8位数据
+  45   1              write_1602com(0x0c);//开显示不显示光标
+  46   1              write_1602com(0x06);//整屏不移动，光标自动右移
+  47   1              write_1602com(0x01);//清显示
+  48   1      
+  49   1              write_1602com(yh+1);//日历显示固定符号从第一行第1个位置之后开始显示
+  50   1              for(a=0;a<14;a++)
+  51   1              {
+  52   2              write_1602dat(tab1[a]);//向液晶屏写日历显示的固定符号部分
+  53   2              }
+  54   1              write_1602com(er);//时间显示固定符号写入位置，从第2个位置后开始显示
+  55   1              for(a=0;a<8;a++)
+C51 COMPILER V9.01   LCD1602                                                               01/30/2025 23:13:32 PAGE 2   
+
+  56   1              {
+  57   2              write_1602dat(tab2[a]);//写显示时间固定符号，两个冒号
+  58   2              }
+  59   1      
+  60   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    162    ----
+   CONSTANT SIZE    =     21    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
