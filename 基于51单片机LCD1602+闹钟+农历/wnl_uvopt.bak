@@ -191,10 +191,10 @@
       <FileType>1</FileType>
       <tvExp>1</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>3</ColumnNumber>
+      <ColumnNumber>27</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>1</TopLine>
-      <CurrentLine>1</CurrentLine>
+      <TopLine>238</TopLine>
+      <CurrentLine>256</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>.\main.c</PathWithFileName>
       <FilenameWithoutPath>main.c</FilenameWithoutPath>
@@ -230,7 +230,7 @@
   </Group>
 
   <AlienFiles>
-    <PathWithFilename>E:\CSDN上的资料\基于51单片机LCD1602+闹钟+农历\基于51单片机1602带闹钟万年历\C语言程序\DS1302.H</PathWithFilename>
+    <PathWithFilename>E:\CSDN上的资料\MCU\基于51单片机LCD1602+闹钟+农历\DS1302.H</PathWithFilename>
     <TopLine>1</TopLine>
     <CurrentLine>5</CurrentLine>
     <Constant>0</Constant>
@@ -256,7 +256,7 @@
   </AlienFiles>
 
   <AlienFiles>
-    <PathWithFilename>E:\CSDN上的资料\基于51单片机LCD1602+闹钟+农历\基于51单片机1602带闹钟万年历\C语言程序\LCD1602.H</PathWithFilename>
+    <PathWithFilename>E:\CSDN上的资料\MCU\基于51单片机LCD1602+闹钟+农历\LCD1602.H</PathWithFilename>
     <TopLine>1</TopLine>
     <CurrentLine>17</CurrentLine>
     <Constant>0</Constant>
@@ -1626,9 +1626,9 @@
       <Documents>
         <Doc>
           <Name>.\main.c</Name>
-          <ColumnNumber>3</ColumnNumber>
-          <TopLine>1</TopLine>
-          <CurrentLine>1</CurrentLine>
+          <ColumnNumber>27</ColumnNumber>
+          <TopLine>238</TopLine>
+          <CurrentLine>256</CurrentLine>
         </Doc>
         <Doc>
           <Name>.\LCD1602.c</Name>

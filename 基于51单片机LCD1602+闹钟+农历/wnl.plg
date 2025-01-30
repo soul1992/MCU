@@ -3,51 +3,7 @@
 <pre>
 <h1>礦ision Build Log</h1>
 <h2>Project:</h2>
-E:\CSDN上的资料\基于51单片机LCD1602+闹钟+农历\wnl.uvproj
+E:\CSDN上的资料\MCU\基于51单片机LCD1602+闹钟+农历\wnl.uvproj
 Project File Date:  01/30/2025
 
 <h2>Output:</h2>
-Build target 'Target 1'
-assembling STARTUP.A51...
-compiling main.c...
-compiling DS1302.c...
-compiling LCD1602.c...
-linking...
-*** WARNING L15: MULTIPLE CALL TO SEGMENT
-    SEGMENT: ?PR?_WRITE_SFM?MAIN
-    CALLER1: ?C_C51STARTUP
-    CALLER2: ?PR?TIMER0?MAIN
-*** WARNING L15: MULTIPLE CALL TO SEGMENT
-    SEGMENT: ?PR?_WRITE_WEEK?MAIN
-    CALLER1: ?C_C51STARTUP
-    CALLER2: ?PR?TIMER0?MAIN
-*** WARNING L15: MULTIPLE CALL TO SEGMENT
-    SEGMENT: ?PR?_WRITE_NYR?MAIN
-    CALLER1: ?C_C51STARTUP
-    CALLER2: ?PR?TIMER0?MAIN
-Program Size: data=47.0 xdata=0 code=5175
-creating hex file from "wnl"...
-"wnl" - 0 Error(s), 3 Warning(s).
-compiling main.c...
-main.c - 0 Error(s), 0 Warning(s).
-Build target 'Target 1'
-assembling STARTUP.A51...
-compiling main.c...
-compiling DS1302.c...
-compiling LCD1602.c...
-linking...
-*** WARNING L15: MULTIPLE CALL TO SEGMENT
-    SEGMENT: ?PR?_WRITE_SFM?MAIN
-    CALLER1: ?C_C51STARTUP
-    CALLER2: ?PR?TIMER0?MAIN
-*** WARNING L15: MULTIPLE CALL TO SEGMENT
-    SEGMENT: ?PR?_WRITE_WEEK?MAIN
-    CALLER1: ?C_C51STARTUP
-    CALLER2: ?PR?TIMER0?MAIN
-*** WARNING L15: MULTIPLE CALL TO SEGMENT
-    SEGMENT: ?PR?_WRITE_NYR?MAIN
-    CALLER1: ?C_C51STARTUP
-    CALLER2: ?PR?TIMER0?MAIN
-Program Size: data=47.0 xdata=0 code=5175
-creating hex file from "wnl"...
-"wnl" - 0 Error(s), 3 Warning(s).

@@ -1,0 +1,9 @@
+接线说明
+LCD1602:EN P2.2
+		RW P2.1
+		RS P2.0
+低电平触发的蜂鸣器IO P2.3
+
+DS1302: SCLK P3.4
+		DIO  P3.5
+		RST  P3.6
