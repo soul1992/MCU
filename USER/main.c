@@ -151,61 +151,54 @@ void start_task(void *pvParameters)
     taskEXIT_CRITICAL();            //退出临界区
 }
 
-volatile uint8_t led_on_flag = 0; // LED任务控制标志
-
-void LCD_task(void * pvParameters)
+// LCD任务
+void LCD_task(void *pvParameters)
 {
-	while(1)
-	{
-		if(GET_NUM()) // 密码输入正确
-		{
-			printf("密码输入正确\r\n");
-			LCD_ShowString(80,150,260,16,16,(u8 *)"password match"); 
-			xEventGroupSetBits(EventGroupHandler, EVENTBIT_0);
-			led_on_flag = 1;  // 让LED开始闪烁
-		}
-		else
-		{
-			printf("密码输入错误\r\n");
-			LCD_ShowString(80,150,260,16,16,(u8 *)"password error");
-			err++;
-			if(err == 3)
-			{
-				xEventGroupSetBits(EventGroupHandler, EVENTBIT_1);
-				vTaskSuspend(LED1Task_Handler);
-				LCD_ShowString(0,100,260,16,16,(u8 *)"Lock 3 hours");
-			}
-		}					
-		vTaskDelay(100 / portTICK_PERIOD_MS); // 延时10ms
-	}	
+    while (1)
+    {
+        if (GET_NUM()) // 密码输入正确
+        {
+            printf("密码输入正确\r\n");
+            LCD_ShowString(80, 150, 260, 16, 16, (u8 *)"password match");
+            xTaskNotifyGive(LED1Task_Handler); // 发送任务通知给 LED1 任务
+        }
+        else
+        {
+            printf("密码输入错误\r\n");
+            LCD_ShowString(80, 150, 260, 16, 16, (u8 *)"password error");
+            err++;
+            if (err == 3)  // 输错 3 次
+            {
+                LCD_ShowString(0, 100, 260, 16, 16, (u8 *)"Lock 3 hours");
+                xTaskNotifyGive(LED0Task_Handler); // 发送任务通知给 LED0 任务
+                vTaskSuspend(LED1Task_Handler);  // 停止 LED1 任务
+            }
+        }
+        vTaskDelay(100 / portTICK_PERIOD_MS);
+    }
 }
 
+// LED1 闪烁任务（正确密码时闪烁）
 void led1_task(void *p_arg)
 {
-	while(1)
-	{
-		if(led_on_flag) // 检查标志位是否允许LED闪烁
-		{
-			LED1 = !LED1; // 反转LED状态
-			vTaskDelay(500 / portTICK_PERIOD_MS); // 500ms的闪烁
-		}
-		else
-		{
-			vTaskDelay(10 / portTICK_PERIOD_MS); // 任务挂起，防止CPU过载
-		}
-	}
+    while (1)
+    {
+        ulTaskNotifyTake(pdTRUE, portMAX_DELAY); // 等待 LCD 任务的通知
+        while (1)
+        {
+            LED1 = !LED1;
+            vTaskDelay(500 / portTICK_PERIOD_MS);
+        }
+    }
 }
 
+// LED0 常亮任务（输错 3 次后亮起）
 void led0_task(void *p_arg)
 {
-	while(1)
-	{
-		if(xEventGroupGetBits(EventGroupHandler) & EVENTBIT_1) // 轮询事件位
-		{
-			LED0 = 0; // 让 LED0 常亮
-		}
-		vTaskDelay(10 / portTICK_PERIOD_MS); // 适当延时，防止 CPU 过载
-	}
+    while (1)
+    {
+        ulTaskNotifyTake(pdTRUE, portMAX_DELAY); // 等待通知，收到通知后清除计数
+        LED0 = 0; // 让 LED0 常亮
+        vTaskSuspend(NULL); // 任务进入挂起状态，避免重复执行
+    }
 }
-
-
