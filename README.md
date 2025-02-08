@@ -12,7 +12,7 @@ STM32 FreeRTOS 智能门禁项目
 3.低功耗
 1)LED0任务执行后自动挂起，减少CPU占用
 2)LED1任务可被暂停/恢复
-4.📂 STM32-FreeRTOS-智能门禁
+4.📂STM32-FreeRTOS-智能门禁
 ├── 📄 main.c           // 主程序入口
 ├── 📄 lcd.c            // LCD 显示相关代码
 ├── 📄 led.c            // LED 控制代码
