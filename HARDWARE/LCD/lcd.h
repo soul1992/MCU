@@ -148,10 +148,10 @@ void LCD_Set_Window(u16 sx, u16 sy, u16 width, u16 height); //ÉèÖÃ´°¿Ú//LCD·Ö±æÂ
 
 
 
-u16 GET_NUM(void);
-u8 AS608_get_keynum(u16 x,u16 y);
-void AS608_key_staset(u16 x,u16 y,u8 keyx,u8 sta);
-void AS608_load_keyboard(u16 x,u16 y,u8 **kbtbl);
+u16 Acquisition_Number(void);
+u8 Key_Digit(u16 x,u16 y);
+void Keyboard_Status(u16 x,u16 y,u8 keyx,u8 sta);
+void Virtual_keyboard(u16 x,u16 y,u8 **KeyArray);
 void Chinese_Show_one(u8 x, u8 y,  u8 num, u8 size,u8 mode);
 void Chinese_Show_two(u8 x, u8 y,  u8 num, u8 size,u8 mode);
 #endif  

@@ -3,7 +3,7 @@
 <title>Static Call Graph - [..\OBJ\LED.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image ..\OBJ\LED.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060960: Last Updated: Sun Feb 09 21:33:11 2025
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060960: Last Updated: Sun Feb 09 22:28:55 2025
 <BR><P>
 <H3>Maximum Stack Usage =        416 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -334,13 +334,13 @@ Global Symbols
 </UL>
 <P><STRONG><a name="[74]"></a>LCD_task</STRONG> (Thumb, 200 bytes, Stack size 16 bytes, main.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 304 + Unknown Stack Size
-<LI>Call Chain = LCD_task &rArr; GET_NUM &rArr; AS608_get_keynum &rArr; AS608_key_staset &rArr; Show_Str_Mid &rArr; Show_Str &rArr; LCD_ShowChar &rArr; LCD_Fast_DrawPoint
+<LI>Call Chain = LCD_task &rArr; Acquisition_Number &rArr; Key_Digit &rArr; Keyboard_Status &rArr; Show_Str_Mid &rArr; Show_Str &rArr; LCD_ShowChar &rArr; LCD_Fast_DrawPoint
 </UL>
 <BR>[Calls]<UL><LI><a href="#[77]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xTaskGenericNotify
 <LI><a href="#[72]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vTaskDelay
 <LI><a href="#[78]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LCD_ShowString
-<LI><a href="#[75]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GET_NUM
 <LI><a href="#[76]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Chinese_Show_one
+<LI><a href="#[75]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Acquisition_Number
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> main.o(.text)
 </UL>
@@ -363,6 +363,7 @@ Global Symbols
 <LI><a href="#[89]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vTaskStartScheduler
 <LI><a href="#[80]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;uart_init
 <LI><a href="#[7f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;delay_init
+<LI><a href="#[88]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Virtual_keyboard
 <LI><a href="#[87]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TP_Save_Adjdata
 <LI><a href="#[5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TP_Adjust
 <LI><a href="#[7e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;NVIC_PriorityGroupConfig
@@ -374,7 +375,6 @@ Global Symbols
 <LI><a href="#[83]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;KEY_Init
 <LI><a href="#[76]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Chinese_Show_one
 <LI><a href="#[82]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;BEEP_Init
-<LI><a href="#[88]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AS608_load_keyboard
 </UL>
 <BR>[Called By]<UL><LI><a href="#[68]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__rt_entry_main
 </UL>
@@ -729,8 +729,8 @@ Global Symbols
 <BR>[Calls]<UL><LI><a href="#[a5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LCD_SetCursor
 <LI><a href="#[a9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LCD_WriteRAM_Prepare
 </UL>
-<BR>[Called By]<UL><LI><a href="#[c0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AS608_key_staset
-<LI><a href="#[88]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AS608_load_keyboard
+<BR>[Called By]<UL><LI><a href="#[c0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Keyboard_Status
+<LI><a href="#[88]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Virtual_keyboard
 </UL>
 
 <P><STRONG><a name="[b4]"></a>LCD_Color_Fill</STRONG> (Thumb, 84 bytes, Stack size 32 bytes, lcd.o(.text), UNUSED)
@@ -752,7 +752,7 @@ Global Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[b5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LCD_DrawLine
 </UL>
-<BR>[Called By]<UL><LI><a href="#[88]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AS608_load_keyboard
+<BR>[Called By]<UL><LI><a href="#[88]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Virtual_keyboard
 </UL>
 
 <P><STRONG><a name="[b7]"></a>LCD_Draw_Circle</STRONG> (Thumb, 176 bytes, Stack size 44 bytes, lcd.o(.text))
@@ -800,7 +800,7 @@ Global Symbols
 </UL>
 <BR>[Called By]<UL><LI><a href="#[e6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TP_Adj_Info_Show
 <LI><a href="#[5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TP_Adjust
-<LI><a href="#[75]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GET_NUM
+<LI><a href="#[75]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Acquisition_Number
 <LI><a href="#[69]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 <LI><a href="#[74]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LCD_task
 </UL>
@@ -818,8 +818,8 @@ Global Symbols
 <BR><BR>[Calls]<UL><LI><a href="#[b9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LCD_Fast_DrawPoint
 </UL>
 
-<P><STRONG><a name="[88]"></a>AS608_load_keyboard</STRONG> (Thumb, 264 bytes, Stack size 48 bytes, lcd.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 216<LI>Call Chain = AS608_load_keyboard &rArr; Show_Str_Mid &rArr; Show_Str &rArr; LCD_ShowChar &rArr; LCD_Fast_DrawPoint
+<P><STRONG><a name="[88]"></a>Virtual_keyboard</STRONG> (Thumb, 264 bytes, Stack size 48 bytes, lcd.o(.text))
+<BR><BR>[Stack]<UL><LI>Max Depth = 216<LI>Call Chain = Virtual_keyboard &rArr; Show_Str_Mid &rArr; Show_Str &rArr; LCD_ShowChar &rArr; LCD_Fast_DrawPoint
 </UL>
 <BR>[Calls]<UL><LI><a href="#[be]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Show_Str_Mid
 <LI><a href="#[bf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Show_Str
@@ -829,28 +829,28 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[69]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[c0]"></a>AS608_key_staset</STRONG> (Thumb, 138 bytes, Stack size 32 bytes, lcd.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 200<LI>Call Chain = AS608_key_staset &rArr; Show_Str_Mid &rArr; Show_Str &rArr; LCD_ShowChar &rArr; LCD_Fast_DrawPoint
+<P><STRONG><a name="[c0]"></a>Keyboard_Status</STRONG> (Thumb, 138 bytes, Stack size 32 bytes, lcd.o(.text))
+<BR><BR>[Stack]<UL><LI>Max Depth = 200<LI>Call Chain = Keyboard_Status &rArr; Show_Str_Mid &rArr; Show_Str &rArr; LCD_ShowChar &rArr; LCD_Fast_DrawPoint
 </UL>
 <BR>[Calls]<UL><LI><a href="#[be]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Show_Str_Mid
 <LI><a href="#[b3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LCD_Fill
 </UL>
-<BR>[Called By]<UL><LI><a href="#[c1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AS608_get_keynum
+<BR>[Called By]<UL><LI><a href="#[c1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Key_Digit
 </UL>
 
-<P><STRONG><a name="[c1]"></a>AS608_get_keynum</STRONG> (Thumb, 192 bytes, Stack size 40 bytes, lcd.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 240<LI>Call Chain = AS608_get_keynum &rArr; AS608_key_staset &rArr; Show_Str_Mid &rArr; Show_Str &rArr; LCD_ShowChar &rArr; LCD_Fast_DrawPoint
+<P><STRONG><a name="[c1]"></a>Key_Digit</STRONG> (Thumb, 192 bytes, Stack size 40 bytes, lcd.o(.text))
+<BR><BR>[Stack]<UL><LI>Max Depth = 240<LI>Call Chain = Key_Digit &rArr; Keyboard_Status &rArr; Show_Str_Mid &rArr; Show_Str &rArr; LCD_ShowChar &rArr; LCD_Fast_DrawPoint
 </UL>
-<BR>[Calls]<UL><LI><a href="#[c0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AS608_key_staset
+<BR>[Calls]<UL><LI><a href="#[c0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Keyboard_Status
 </UL>
-<BR>[Called By]<UL><LI><a href="#[75]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GET_NUM
+<BR>[Called By]<UL><LI><a href="#[75]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Acquisition_Number
 </UL>
 
-<P><STRONG><a name="[75]"></a>GET_NUM</STRONG> (Thumb, 340 bytes, Stack size 48 bytes, lcd.o(.text))
+<P><STRONG><a name="[75]"></a>Acquisition_Number</STRONG> (Thumb, 340 bytes, Stack size 48 bytes, lcd.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 288 + Unknown Stack Size
-<LI>Call Chain = GET_NUM &rArr; AS608_get_keynum &rArr; AS608_key_staset &rArr; Show_Str_Mid &rArr; Show_Str &rArr; LCD_ShowChar &rArr; LCD_Fast_DrawPoint
+<LI>Call Chain = Acquisition_Number &rArr; Key_Digit &rArr; Keyboard_Status &rArr; Show_Str_Mid &rArr; Show_Str &rArr; LCD_ShowChar &rArr; LCD_Fast_DrawPoint
 </UL>
-<BR>[Calls]<UL><LI><a href="#[c1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AS608_get_keynum
+<BR>[Calls]<UL><LI><a href="#[c1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Key_Digit
 <LI><a href="#[78]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LCD_ShowString
 <LI><a href="#[b2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2printf
 </UL>
@@ -1296,7 +1296,7 @@ Global Symbols
 <BR>[Calls]<UL><LI><a href="#[b8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LCD_ShowChar
 </UL>
 <BR>[Called By]<UL><LI><a href="#[be]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Show_Str_Mid
-<LI><a href="#[88]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AS608_load_keyboard
+<LI><a href="#[88]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Virtual_keyboard
 </UL>
 
 <P><STRONG><a name="[be]"></a>Show_Str_Mid</STRONG> (Thumb, 82 bytes, Stack size 40 bytes, showkey.o(.text))
@@ -1305,8 +1305,8 @@ Global Symbols
 <BR>[Calls]<UL><LI><a href="#[bf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Show_Str
 <LI><a href="#[ef]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;strlen
 </UL>
-<BR>[Called By]<UL><LI><a href="#[c0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AS608_key_staset
-<LI><a href="#[88]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AS608_load_keyboard
+<BR>[Called By]<UL><LI><a href="#[c0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Keyboard_Status
+<LI><a href="#[88]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Virtual_keyboard
 </UL>
 
 <P><STRONG><a name="[82]"></a>BEEP_Init</STRONG> (Thumb, 50 bytes, Stack size 16 bytes, beep.o(.text))
@@ -2829,7 +2829,7 @@ Global Symbols
 <LI><a href="#[7d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortExitCritical
 <LI><a href="#[7a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortEnterCritical
 <LI><a href="#[84]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LCD_Init
-<LI><a href="#[75]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GET_NUM
+<LI><a href="#[75]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Acquisition_Number
 <LI><a href="#[149]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;pcTaskGetName
 <LI><a href="#[142]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xTaskResumeFromISR
 <LI><a href="#[141]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vTaskResume

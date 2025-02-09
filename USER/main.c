@@ -1,7 +1,3 @@
-//#include "sys.h"
-//#include "delay.h"
-//#include "FreeRTOS.h"
-//#include "task.h"
 #include "sys.h"
 #include "delay.h"
 #include "usart.h"
@@ -94,7 +90,7 @@ const  u8* kbd_menu[15]={"mima"," : ","lock","1","2","3","4","5","6","7","8","9"
 		}
    }
 	
-	AS608_load_keyboard(0,170,(u8**)kbd_menu);//加载虚拟键盘
+	Virtual_keyboard(0,170,(u8**)kbd_menu);//加载虚拟键盘
 	 
 	
 	Chinese_Show_one(65,0,0,16,0);
@@ -150,7 +146,7 @@ void LCD_task(void *pvParameters)
 {
     while (1)
     {
-        if (GET_NUM()) // 密码输入正确
+        if (Acquisition_Number()) // 密码输入正确
         {
             Chinese_Show_one(80,120,24,16,0);
             Chinese_Show_one(100,120,26,16,0);

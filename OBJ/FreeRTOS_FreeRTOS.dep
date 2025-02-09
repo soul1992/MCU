@@ -1,6 +1,6 @@
 Dependencies for Project 'FreeRTOS', Target 'FreeRTOS': (DO NOT MODIFY !)
 CompilerVersion: 5060960::V5.06 update 7 (build 960)::.\ARMCC
-F (.\main.c)(0x67A8ACFE)(-c --cpu Cortex-M3 -g -O2 --apcs=interwork -I ..\SYSTEM\delay -I ..\SYSTEM\sys -I ..\SYSTEM\usart -I ..\USER -I ..\STM32F10x_FWLib\inc -I ..\CORE -I ..\FreeRTOS\include -I ..\FreeRTOS\portable\RVDS\ARM_CM3 -I ..\HARDWARE\24CXX -I ..\HARDWARE\IIC -I ..\HARDWARE\KEY -I ..\HARDWARE\LED -I ..\HARDWARE\TOUCH -I ..\HARDWARE\LCD -I ..\HARDWARE\BEEP-IH:\Keil5\Keil\STM32F1xx_DFP\1.1.0\Device\Include-D__UVISION_VERSION="538" -DSTM32F10X_HD -DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER-o ..\obj\main.o --omf_browse ..\obj\main.crf --depend ..\obj\main.d)
+F (.\main.c)(0x67A8BB9A)(-c --cpu Cortex-M3 -g -O2 --apcs=interwork -I ..\SYSTEM\delay -I ..\SYSTEM\sys -I ..\SYSTEM\usart -I ..\USER -I ..\STM32F10x_FWLib\inc -I ..\CORE -I ..\FreeRTOS\include -I ..\FreeRTOS\portable\RVDS\ARM_CM3 -I ..\HARDWARE\24CXX -I ..\HARDWARE\IIC -I ..\HARDWARE\KEY -I ..\HARDWARE\LED -I ..\HARDWARE\TOUCH -I ..\HARDWARE\LCD -I ..\HARDWARE\BEEP-IH:\Keil5\Keil\STM32F1xx_DFP\1.1.0\Device\Include-D__UVISION_VERSION="538" -DSTM32F10X_HD -DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER-o ..\obj\main.o --omf_browse ..\obj\main.crf --depend ..\obj\main.d)
 I (..\SYSTEM\sys\sys.h)(0x583D2D90)
 I (..\USER\stm32f10x.h)(0x4D783CB4)
 I (..\CORE\core_cm3.h)(0x67A8AD81)
@@ -48,7 +48,7 @@ I (..\FreeRTOS\include\list.h)(0x573F3A16)
 I (..\HARDWARE\KEY\key.h)(0x55102792)
 I (..\FreeRTOS\include\event_groups.h)(0x573F3A16)
 I (..\FreeRTOS\include\timers.h)(0x573F3A16)
-I (..\HARDWARE\LCD\lcd.h)(0x67A767B8)
+I (..\HARDWARE\LCD\lcd.h)(0x67A8BB21)
 I (H:\Keil5\ARM\ARMCC\include\stdlib.h)(0x60252374)
 I (..\HARDWARE\TOUCH\touch.h)(0x54FBCB5B)
 I (..\HARDWARE\TOUCH\ott2001a.h)(0x54B7AE0D)
@@ -213,8 +213,8 @@ I (..\STM32F10x_FWLib\inc\misc.h)(0x4D783BB4)
 I (..\HARDWARE\KEY\key.h)(0x55102792)
 I (..\SYSTEM\sys\sys.h)(0x583D2D90)
 I (..\SYSTEM\delay\delay.h)(0x583D2EFB)
-F (..\HARDWARE\LCD\lcd.c)(0x67A787F6)(-c --cpu Cortex-M3 -g -O2 --apcs=interwork -I ..\SYSTEM\delay -I ..\SYSTEM\sys -I ..\SYSTEM\usart -I ..\USER -I ..\STM32F10x_FWLib\inc -I ..\CORE -I ..\FreeRTOS\include -I ..\FreeRTOS\portable\RVDS\ARM_CM3 -I ..\HARDWARE\24CXX -I ..\HARDWARE\IIC -I ..\HARDWARE\KEY -I ..\HARDWARE\LED -I ..\HARDWARE\TOUCH -I ..\HARDWARE\LCD -I ..\HARDWARE\BEEP-IH:\Keil5\Keil\STM32F1xx_DFP\1.1.0\Device\Include-D__UVISION_VERSION="538" -DSTM32F10X_HD -DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER-o ..\obj\lcd.o --omf_browse ..\obj\lcd.crf --depend ..\obj\lcd.d)
-I (..\HARDWARE\LCD\lcd.h)(0x67A767B8)
+F (..\HARDWARE\LCD\lcd.c)(0x67A8BB21)(-c --cpu Cortex-M3 -g -O2 --apcs=interwork -I ..\SYSTEM\delay -I ..\SYSTEM\sys -I ..\SYSTEM\usart -I ..\USER -I ..\STM32F10x_FWLib\inc -I ..\CORE -I ..\FreeRTOS\include -I ..\FreeRTOS\portable\RVDS\ARM_CM3 -I ..\HARDWARE\24CXX -I ..\HARDWARE\IIC -I ..\HARDWARE\KEY -I ..\HARDWARE\LED -I ..\HARDWARE\TOUCH -I ..\HARDWARE\LCD -I ..\HARDWARE\BEEP-IH:\Keil5\Keil\STM32F1xx_DFP\1.1.0\Device\Include-D__UVISION_VERSION="538" -DSTM32F10X_HD -DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER-o ..\obj\lcd.o --omf_browse ..\obj\lcd.crf --depend ..\obj\lcd.d)
+I (..\HARDWARE\LCD\lcd.h)(0x67A8BB21)
 I (..\SYSTEM\sys\sys.h)(0x583D2D90)
 I (..\USER\stm32f10x.h)(0x4D783CB4)
 I (..\CORE\core_cm3.h)(0x67A8AD81)
@@ -356,7 +356,7 @@ I (..\SYSTEM\usart\usart.h)(0x50517A82)
 I (H:\Keil5\ARM\ARMCC\include\stdio.h)(0x60252374)
 I (..\SYSTEM\delay\delay.h)(0x583D2EFB)
 I (H:\Keil5\ARM\ARMCC\include\string.h)(0x6025237E)
-I (..\HARDWARE\LCD\lcd.h)(0x67A767B8)
+I (..\HARDWARE\LCD\lcd.h)(0x67A8BB21)
 I (H:\Keil5\ARM\ARMCC\include\stdlib.h)(0x60252374)
 F (..\HARDWARE\TOUCH\gt9147.c)(0x5ECC7706)(-c --cpu Cortex-M3 -g -O2 --apcs=interwork -I ..\SYSTEM\delay -I ..\SYSTEM\sys -I ..\SYSTEM\usart -I ..\USER -I ..\STM32F10x_FWLib\inc -I ..\CORE -I ..\FreeRTOS\include -I ..\FreeRTOS\portable\RVDS\ARM_CM3 -I ..\HARDWARE\24CXX -I ..\HARDWARE\IIC -I ..\HARDWARE\KEY -I ..\HARDWARE\LED -I ..\HARDWARE\TOUCH -I ..\HARDWARE\LCD -I ..\HARDWARE\BEEP-IH:\Keil5\Keil\STM32F1xx_DFP\1.1.0\Device\Include-D__UVISION_VERSION="538" -DSTM32F10X_HD -DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER-o ..\obj\gt9147.o --omf_browse ..\obj\gt9147.crf --depend ..\obj\gt9147.d)
 I (..\HARDWARE\TOUCH\gt9147.h)(0x5510EA76)
@@ -397,7 +397,7 @@ I (..\SYSTEM\usart\usart.h)(0x50517A82)
 I (H:\Keil5\ARM\ARMCC\include\stdio.h)(0x60252374)
 I (..\SYSTEM\delay\delay.h)(0x583D2EFB)
 I (H:\Keil5\ARM\ARMCC\include\string.h)(0x6025237E)
-I (..\HARDWARE\LCD\lcd.h)(0x67A767B8)
+I (..\HARDWARE\LCD\lcd.h)(0x67A8BB21)
 I (H:\Keil5\ARM\ARMCC\include\stdlib.h)(0x60252374)
 F (..\HARDWARE\TOUCH\ott2001a.c)(0x55029152)(-c --cpu Cortex-M3 -g -O2 --apcs=interwork -I ..\SYSTEM\delay -I ..\SYSTEM\sys -I ..\SYSTEM\usart -I ..\USER -I ..\STM32F10x_FWLib\inc -I ..\CORE -I ..\FreeRTOS\include -I ..\FreeRTOS\portable\RVDS\ARM_CM3 -I ..\HARDWARE\24CXX -I ..\HARDWARE\IIC -I ..\HARDWARE\KEY -I ..\HARDWARE\LED -I ..\HARDWARE\TOUCH -I ..\HARDWARE\LCD -I ..\HARDWARE\BEEP-IH:\Keil5\Keil\STM32F1xx_DFP\1.1.0\Device\Include-D__UVISION_VERSION="538" -DSTM32F10X_HD -DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER-o ..\obj\ott2001a.o --omf_browse ..\obj\ott2001a.crf --depend ..\obj\ott2001a.d)
 I (..\HARDWARE\TOUCH\ott2001a.h)(0x54B7AE0D)
@@ -471,7 +471,7 @@ I (..\STM32F10x_FWLib\inc\misc.h)(0x4D783BB4)
 I (..\HARDWARE\TOUCH\ott2001a.h)(0x54B7AE0D)
 I (..\HARDWARE\TOUCH\gt9147.h)(0x5510EA76)
 I (..\HARDWARE\TOUCH\ft5206.h)(0x54B7ACCD)
-I (..\HARDWARE\LCD\lcd.h)(0x67A767B8)
+I (..\HARDWARE\LCD\lcd.h)(0x67A8BB21)
 I (H:\Keil5\ARM\ARMCC\include\stdlib.h)(0x60252374)
 I (..\SYSTEM\delay\delay.h)(0x583D2EFB)
 I (H:\Keil5\ARM\ARMCC\include\math.h)(0x60252378)
@@ -507,7 +507,7 @@ I (..\STM32F10x_FWLib\inc\stm32f10x_tim.h)(0x4D783BB4)
 I (..\STM32F10x_FWLib\inc\stm32f10x_usart.h)(0x504F415E)
 I (..\STM32F10x_FWLib\inc\stm32f10x_wwdg.h)(0x4D783BB4)
 I (..\STM32F10x_FWLib\inc\misc.h)(0x4D783BB4)
-I (..\HARDWARE\LCD\lcd.h)(0x67A767B8)
+I (..\HARDWARE\LCD\lcd.h)(0x67A8BB21)
 I (H:\Keil5\ARM\ARMCC\include\stdlib.h)(0x60252374)
 I (..\HARDWARE\LCD\showkey.h)(0x67A7636A)
 I (H:\Keil5\ARM\ARMCC\include\string.h)(0x6025237E)

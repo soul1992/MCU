@@ -6,10 +6,10 @@
 #include "touch.h"	
 #include "showkey.h"
 
-u8** kbd_tbl;
-void AS608_load_keyboard(u16 x,u16 y,u8 **kbtbl);//加载虚拟键盘
-u8  AS608_get_keynum(u16 x,u16 y);//获取键盘数
-u16 GET_NUM(void);//获取数值
+u8** Keyboard_Krray;
+void Virtual_keyboard(u16 x,u16 y,u8 **KeyArray);//加载虚拟键盘
+u8  Key_Digit(u16 x,u16 y);//获取键盘数
+u16 Acquisition_Number(void);//获取数值
 char *str;
 u8 ensure;
 //////////////////////////////////////////////////////////////////////////////////
@@ -2450,11 +2450,11 @@ void Chinese_Show_two(u8 x, u8 y,  u8 num, u8 size,u8 mode)
         }    
     }  
 }
-void AS608_load_keyboard(u16 x,u16 y,u8 **kbtbl)
+void Virtual_keyboard(u16 x,u16 y,u8 **KeyArray)
 {
 	u16 i;
 	POINT_COLOR=BLACK;
-	kbd_tbl=kbtbl;
+	Keyboard_Krray=KeyArray;
 	LCD_Fill(x,y,x+240,y+150,WHITE);
 	LCD_DrawRectangle(x,y,x+240,y+150);						   
 	LCD_DrawRectangle(x+80,y,x+160,y+150);	 
@@ -2464,16 +2464,16 @@ void AS608_load_keyboard(u16 x,u16 y,u8 **kbtbl)
 	for(i=0;i<15;i++)
 	{
 		if(i==1)//按键表第2个‘:’不需要中间显示
-			Show_Str(x+(i%3)*80+2,y+7+30*(i/3),80,30,(u8*)kbd_tbl[i],16,0);	
+			Show_Str(x+(i%3)*80+2,y+7+30*(i/3),80,30,(u8*)Keyboard_Krray[i],16,0);	
 		else
-			Show_Str_Mid(x+(i%3)*80,y+7+30*(i/3),(u8*)kbd_tbl[i],16,80);
+			Show_Str_Mid(x+(i%3)*80,y+7+30*(i/3),(u8*)Keyboard_Krray[i],16,80);
 	} 
 }
 //按键状态设置
 //x,y:键盘坐标
 //key:键值(0~14)
 //sta:状态，0，松开；1，按下；
-void AS608_key_staset(u16 x,u16 y,u8 keyx,u8 sta)
+void Keyboard_Status(u16 x,u16 y,u8 keyx,u8 sta)
 {		  
 	u16 i=keyx/3,j=keyx%3;
 	if(keyx>16)return;
@@ -2482,12 +2482,12 @@ void AS608_key_staset(u16 x,u16 y,u8 keyx,u8 sta)
 	else if(keyx!=1)
 		LCD_Fill(x+j*80+1,y+i*30+1,x+j*80+78,y+i*30+28,WHITE);
 	if(keyx!=1)//不是‘：’
-		Show_Str_Mid(x+j*80,y+7+30*i,(u8*)kbd_tbl[keyx],16,80);	
+		Show_Str_Mid(x+j*80,y+7+30*i,(u8*)Keyboard_Krray[keyx],16,80);	
 }
 //得到触摸屏的输入
 //x,y:键盘坐标
 //返回值:（1~15,对应按键表）
-u8 AS608_get_keynum(u16 x,u16 y)
+u8 Key_Digit(u16 x,u16 y)
 {
 	u16 i,j;
 	
@@ -2511,22 +2511,22 @@ u8 AS608_get_keynum(u16 x,u16 y)
 				if(key_x==key)key=0;
 				else 
 				{
-					AS608_key_staset(x,y,key_x-1,0);
+					Keyboard_Status(x,y,key_x-1,0);
 					key_x=key;
-					AS608_key_staset(x,y,key_x-1,1);
+					Keyboard_Status(x,y,key_x-1,1);
 				}
 				break;
 			}
 	  }  
 	}else if(key_x) 
 	{
-		AS608_key_staset(x,y,key_x-1,0);
+		Keyboard_Status(x,y,key_x-1,0);
 		key_x=0;
 	} 
 	return key; 
 }
 //获取键盘数值
-u16 GET_NUM(void)
+u16 Acquisition_Number(void)
 {
 	
 	int n=0;
@@ -2538,7 +2538,7 @@ u16 GET_NUM(void)
 	u8 a=0;
 	while(1)
 	{
-		key_num=AS608_get_keynum(0,170);	
+		key_num=Key_Digit(0,170);	
 		if(key_num)
 		{
 	
