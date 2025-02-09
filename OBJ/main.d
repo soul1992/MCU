@@ -33,6 +33,7 @@
 ..\obj\main.o: ..\SYSTEM\usart\usart.h
 ..\obj\main.o: H:\Keil5\ARM\ARMCC\Bin\..\include\stdio.h
 ..\obj\main.o: ..\HARDWARE\LED\led.h
+..\obj\main.o: ..\HARDWARE\BEEP\beep.h
 ..\obj\main.o: ..\FreeRTOS\include\FreeRTOS.h
 ..\obj\main.o: H:\Keil5\ARM\ARMCC\Bin\..\include\stddef.h
 ..\obj\main.o: ..\FreeRTOS\include\FreeRTOSConfig.h

@@ -287,7 +287,7 @@ void TP_Adjust(void)
 	POINT_COLOR=BLUE;
 	BACK_COLOR =WHITE;
 	LCD_Clear(WHITE);//清屏   
-	POINT_COLOR=RED;//红色 
+	POINT_COLOR=GREEN;//红色 
 	LCD_Clear(WHITE);//清屏 	   
 	POINT_COLOR=BLACK;
 	LCD_ShowString(40,40,160,100,16,(u8*)TP_REMIND_MSG_TBL);//显示提示信息

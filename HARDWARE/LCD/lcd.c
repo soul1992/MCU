@@ -2453,14 +2453,14 @@ void Chinese_Show_two(u8 x, u8 y,  u8 num, u8 size,u8 mode)
 void AS608_load_keyboard(u16 x,u16 y,u8 **kbtbl)
 {
 	u16 i;
-	POINT_COLOR=RED;
+	POINT_COLOR=BLACK;
 	kbd_tbl=kbtbl;
 	LCD_Fill(x,y,x+240,y+150,WHITE);
 	LCD_DrawRectangle(x,y,x+240,y+150);						   
 	LCD_DrawRectangle(x+80,y,x+160,y+150);	 
 	LCD_DrawRectangle(x,y+30,x+240,y+60);
 	LCD_DrawRectangle(x,y+90,x+240,y+120);
-	POINT_COLOR=BLUE;
+	POINT_COLOR=RED;
 	for(i=0;i<15;i++)
 	{
 		if(i==1)//按键表第2个‘:’不需要中间显示

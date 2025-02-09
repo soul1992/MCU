@@ -13,6 +13,7 @@
 "..\obj\ott2001a.o"
 "..\obj\touch.o"
 "..\obj\showkey.o"
+"..\obj\beep.o"
 "..\obj\delay.o"
 "..\obj\sys.o"
 "..\obj\usart.o"
