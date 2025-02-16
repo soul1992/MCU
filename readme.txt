@@ -10,7 +10,7 @@
 	
 实验现象:
 	本实验在STM32F103开发板上移植了FreeRTOS，版本为V9.0.0。例程中创建了三个任务来测试移植是否成功。
-	start_task任务创建其他两个测试任务，led0_task任务中LED0闪烁，led1_task任务中LED1闪烁。
+	start_task任务创建其他两个测试任务，SG90_task任务中SG90闪烁，led1_task任务中LED1闪烁。
 	
 注意事项:
 	无. 

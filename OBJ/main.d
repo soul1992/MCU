@@ -54,3 +54,5 @@
 ..\obj\main.o: ..\HARDWARE\TOUCH\gt9147.h
 ..\obj\main.o: ..\HARDWARE\TOUCH\ft5206.h
 ..\obj\main.o: H:\Keil5\ARM\ARMCC\Bin\..\include\string.h
+..\obj\main.o: ..\HARDWARE\SG90\PWM.h
+..\obj\main.o: ..\HARDWARE\SG90\Servo.h

@@ -14,6 +14,8 @@
 "..\obj\touch.o"
 "..\obj\showkey.o"
 "..\obj\beep.o"
+"..\obj\pwm.o"
+"..\obj\servo.o"
 "..\obj\delay.o"
 "..\obj\sys.o"
 "..\obj\usart.o"

@@ -10,6 +10,9 @@
 #include "lcd.h"
 #include "touch.h"
 #include "string.h"
+#include "PWM.h"
+#include "Servo.h"
+
  
 /***********************************************************************
  *※※※※※需要技术支持请添加微信phdd2024获取
@@ -39,15 +42,10 @@ void start_task(void *pvParameters);		 //任务函数
 TaskHandle_t LCDTask_Handler;	//任务句柄
 void LCD_task(void *pvParameters);	//任务函数
 
-#define LED0_TASK_PRIO				3 				 //任务优先级	
-#define LED0_STK_SIZE					128				 //任务堆栈大小
-TaskHandle_t LED0Task_Handler;					 //任务句柄	
-void led0_task(void *p_arg);		 //任务函数
-
-#define LED1_TASK_PRIO				3 				 //任务优先级	
-#define LED1_STK_SIZE					128				 //任务堆栈大小
-TaskHandle_t LED1Task_Handler;					 //任务句柄	
-void led1_task(void *p_arg);		 //任务函数
+#define SG90_TASK_PRIO				4				 //任务优先级	
+#define SG90_STK_SIZE					128				 //任务堆栈大小
+TaskHandle_t SG90Task_Handler;					 //任务句柄	
+void SG90_task(void *p_arg);		 //任务函数
 
 const  u8* kbd_menu[15]={"mima"," : ","lock","1","2","3","4","5","6","7","8","9","DEL","0","Enter",};//按键表
  u8 key;
@@ -62,8 +60,9 @@ const  u8* kbd_menu[15]={"mima"," : ","lock","1","2","3","4","5","6","7","8","9"
 	BEEP_Init();         	//初始化蜂鸣器端口
 	KEY_Init();							//初始化按键
 	LCD_Init();							//初始化LCD
+	Servo_Init();
   tp_dev.init();			//初始化触摸屏 
-	 
+	 Servo_SetAngle(0);
 	if(!(tp_dev.touchtype&0x80))//如果是电阻屏
 	{
 		Chinese_Show_one(60,30,12,16,0);
@@ -124,19 +123,12 @@ void start_task(void *pvParameters)
                 (UBaseType_t    )LCD_TASK_PRIO,        
                 (TaskHandle_t*  )&LCDTask_Handler); 
 	 
-	 xTaskCreate(( TaskFunction_t) led0_task,
-                            (const char *) "led0_task",
-                            (uint16_t)LED0_STK_SIZE,
+	 xReturn=xTaskCreate(( TaskFunction_t) SG90_task,
+                            (const char *) "SG90_task",
+                            (uint16_t)SG90_STK_SIZE,
                             (void *) NULL,
-                            (UBaseType_t) LED0_TASK_PRIO,
-                            (TaskHandle_t *) &LED0Task_Handler);
-		
-		 xTaskCreate(( TaskFunction_t) led1_task,
-                            (const char *) "led1_task",
-                            (uint16_t)LED1_STK_SIZE,
-                            (void *) NULL,
-                            (UBaseType_t) LED1_TASK_PRIO,
-                            (TaskHandle_t *) &LED1Task_Handler);
+                            (UBaseType_t) SG90_TASK_PRIO,
+                            (TaskHandle_t *) &SG90Task_Handler);
 		
     vTaskDelete(StartTask_Handler); //删除开始任务
     taskEXIT_CRITICAL();            //退出临界区
@@ -152,7 +144,7 @@ void LCD_task(void *pvParameters)
             Chinese_Show_one(100,120,26,16,0);
             Chinese_Show_one(120,120,28,16,0);
             Chinese_Show_one(140,120,30,16,0);
-            xTaskNotifyGive(LED1Task_Handler); // 发送任务通知
+            xTaskNotifyGive(SG90Task_Handler); // 发送任务通知
         }
         else
         {
@@ -165,7 +157,7 @@ void LCD_task(void *pvParameters)
             if (err == 3)  // 输错 3 次
             {
                 LCD_ShowString(65, 100, 260, 16, 16, (u8 *)"LOCK 10 seconds");
-                xTaskNotifyGive(LED0Task_Handler); // 发送任务通知给 LED0 任务
+//								vTaskSuspend(SG90Task_Handler);
 
                 vTaskDelay(10000 / portTICK_PERIOD_MS); // **等待 10秒钟后解锁**
                 err = 0; // **解锁后允许用户输入**
@@ -177,41 +169,25 @@ void LCD_task(void *pvParameters)
 
 
 
-void led0_task(void *p_arg)
+void SG90_task(void * pvParameters)
 {
     while (1)
     {
-			int i;
-        ulTaskNotifyTake(pdTRUE, portMAX_DELAY); // 等待通知（密码错误 3 次）
-       
-        for(i=0;i <6;i++) // 让蜂鸣器间隔响 3 秒
-        {
-            BEEP = 0;  // 打开蜂鸣器（低电平触发）
-            vTaskDelay(500 / portTICK_PERIOD_MS); // 响 500ms
-            BEEP = 1;  // 关闭蜂鸣器
-            vTaskDelay(500 / portTICK_PERIOD_MS); // 停 500ms
-        }
+        // 等待通知，直到接收到来自LCD_task的通知
+        ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
 
-        BEEP = 0; // 确保蜂鸣器最终关闭
-        err = 0; // 复位错误次数，允许用户重新输入密码
+        // 密码正确，舵机旋转到180度
+        Servo_SetAngle(180);
+        vTaskDelay(2000 / portTICK_PERIOD_MS);  // 延时2秒
 
-        // **不要使用 vTaskSuspend(NULL);，让任务继续等待新的通知**
-    }
-}
-
-
-void led1_task(void *p_arg)
-{
-    while (1)
-    {
-			int i=0;
-        ulTaskNotifyTake(pdTRUE, portMAX_DELAY); // 等待 LCD 任务的通知
-        for(i=0;i <5;i++)// LED1 闪烁 10 次
-        {
-            LED0 = !LED0;
-            vTaskDelay(500 / portTICK_PERIOD_MS);
-        }
-        LED0 = 1; // LED1 关闭
+        // 舵机旋转回0度
+        Servo_SetAngle(0);
+        
+        // 清空LCD显示
+        LCD_ShowString(80, 150, 260, 16, 16, "              ");
+        
+        // 延时一定时间以防止任务过度频繁运行
+        vTaskDelay(100 / portTICK_PERIOD_MS); // 每100ms检查一次
     }
 }
 
