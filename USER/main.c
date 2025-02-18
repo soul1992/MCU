@@ -203,14 +203,17 @@ void AS608_task(void *pvParameters)
 		extern uint8_t Numvalue[];
 		if((Numvalue[9] == 0) && (Numvalue[5] != 0))
         {
+					  Chinese_Show_two(80,120,0,16,0);
+            Chinese_Show_two(96,120,2,16,0);
+            Chinese_Show_two(112,120,4,16,0);
+            Chinese_Show_two(128,120,6,16,0);
+					  Chinese_Show_two(144,120,8,16,0);
+            Chinese_Show_two(160,120,10,16,0);
            xTaskNotifyGive(SG90Task_Handler); // 发送任务通知
 					  Numvalue[9] = 1;
         }
-		  
-
-			     
-		}
-		vTaskDelay(100);
+				vTaskDelay(100 / portTICK_PERIOD_MS); // 避免 CPU 过载
+		}		
 }
 
 void SG90_task(void * pvParameters)
