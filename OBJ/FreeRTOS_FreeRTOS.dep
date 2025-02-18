@@ -1,6 +1,6 @@
 Dependencies for Project 'FreeRTOS', Target 'FreeRTOS': (DO NOT MODIFY !)
 CompilerVersion: 5060960::V5.06 update 7 (build 960)::.\ARMCC
-F (.\main.c)(0x67B4AA59)(--c99 -c --cpu Cortex-M3 -g -O2 --apcs=interwork -I ..\SYSTEM\delay -I ..\SYSTEM\sys -I ..\SYSTEM\usart -I ..\USER -I ..\STM32F10x_FWLib\inc -I ..\CORE -I ..\FreeRTOS\include -I ..\FreeRTOS\portable\RVDS\ARM_CM3 -I ..\HARDWARE\24CXX -I ..\HARDWARE\IIC -I ..\HARDWARE\KEY -I ..\HARDWARE\LED -I ..\HARDWARE\TOUCH -I ..\HARDWARE\LCD -I ..\HARDWARE\BEEP -I ..\HARDWARE\SG90 -I ..\HARDWARE\AS608-IH:\Keil5\Keil\STM32F1xx_DFP\1.1.0\Device\Include-D__UVISION_VERSION="538" -DSTM32F10X_HD -DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER-o ..\obj\main.o --omf_browse ..\obj\main.crf --depend ..\obj\main.d)
+F (.\main.c)(0x67B4B882)(--c99 -c --cpu Cortex-M3 -g -O2 --apcs=interwork -I ..\SYSTEM\delay -I ..\SYSTEM\sys -I ..\SYSTEM\usart -I ..\USER -I ..\STM32F10x_FWLib\inc -I ..\CORE -I ..\FreeRTOS\include -I ..\FreeRTOS\portable\RVDS\ARM_CM3 -I ..\HARDWARE\24CXX -I ..\HARDWARE\IIC -I ..\HARDWARE\KEY -I ..\HARDWARE\LED -I ..\HARDWARE\TOUCH -I ..\HARDWARE\LCD -I ..\HARDWARE\BEEP -I ..\HARDWARE\SG90 -I ..\HARDWARE\AS608-IH:\Keil5\Keil\STM32F1xx_DFP\1.1.0\Device\Include-D__UVISION_VERSION="538" -DSTM32F10X_HD -DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER-o ..\obj\main.o --omf_browse ..\obj\main.crf --depend ..\obj\main.d)
 I (..\SYSTEM\sys\sys.h)(0x583D2D90)
 I (..\USER\stm32f10x.h)(0x4D783CB4)
 I (..\CORE\core_cm3.h)(0x67A8AD81)

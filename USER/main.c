@@ -188,6 +188,8 @@ void LCD_task(void *pvParameters)
 								vTaskSuspend(SG90Task_Handler);
 
                 vTaskDelay(10000 / portTICK_PERIOD_MS); // **等待 10秒钟后解锁**
+								LCD_ShowString(65, 100, 260, 16, 16, "                      ");
+								LCD_ShowString(65, 120, 260, 16, 16, "                      ");
                 err = 0; // **解锁后允许用户输入**
             }
         }
@@ -209,7 +211,7 @@ void AS608_task(void *pvParameters)
             Chinese_Show_two(128,120,6,16,0);
 					  Chinese_Show_two(144,120,8,16,0);
             Chinese_Show_two(160,120,10,16,0);
-           xTaskNotifyGive(SG90Task_Handler); // 发送任务通知
+						xTaskNotifyGive(SG90Task_Handler); // 发送任务通知
 					  Numvalue[9] = 1;
         }
 				vTaskDelay(100 / portTICK_PERIOD_MS); // 避免 CPU 过载
