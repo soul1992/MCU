@@ -1,17 +1,32 @@
+//#include "sys.h"
+//#include "delay.h"
+//#include "usart.h"
+//#include "led.h"
+//#include "beep.h"
+//#include "FreeRTOS.h"
+//#include "task.h"
+//#include "key.h"
+//#include "event_groups.h"
+//#include "lcd.h"
+//#include "touch.h"
+//#include "string.h"
+//#include "PWM.h"
+//#include "Servo.h"
 #include "sys.h"
 #include "delay.h"
-#include "usart.h"
-#include "led.h"
-#include "beep.h"
+#include "string.h"
 #include "FreeRTOS.h"
 #include "task.h"
+
+#include "usart.h"
+
 #include "key.h"
-#include "event_groups.h"
 #include "lcd.h"
 #include "touch.h"
-#include "string.h"
+
 #include "PWM.h"
 #include "Servo.h"
+#include "bsp_as608.h"
 
  
 /***********************************************************************
@@ -42,7 +57,12 @@ void start_task(void *pvParameters);		 //任务函数
 TaskHandle_t LCDTask_Handler;	//任务句柄
 void LCD_task(void *pvParameters);	//任务函数
 
-#define SG90_TASK_PRIO				4				 //任务优先级	
+#define AS608_TASK_PRIO		2							//任务优先级
+#define AS608_STK_SIZE 		128  					//任务堆栈大小	
+TaskHandle_t AS608Task_Handler;					//任务句柄
+void AS608_task(void *pvParameters);		//任务函数
+
+#define SG90_TASK_PRIO				3				 //任务优先级	
 #define SG90_STK_SIZE					128				 //任务堆栈大小
 TaskHandle_t SG90Task_Handler;					 //任务句柄	
 void SG90_task(void *p_arg);		 //任务函数
@@ -56,8 +76,9 @@ const  u8* kbd_menu[15]={"mima"," : ","lock","1","2","3","4","5","6","7","8","9"
 	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);//设置系统中断优先级分组2
 	delay_init();					//初始化延时函数
 	uart_init(115200);     				//初始化串口
-	LED_Init();		        			//初始化LED端口
-	BEEP_Init();         	//初始化蜂鸣器端口
+	 
+	AS608_Config(); 
+	 
 	KEY_Init();							//初始化按键
 	LCD_Init();							//初始化LCD
 	Servo_Init();
@@ -123,7 +144,14 @@ void start_task(void *pvParameters)
                 (UBaseType_t    )LCD_TASK_PRIO,        
                 (TaskHandle_t*  )&LCDTask_Handler); 
 	 
-	 xReturn=xTaskCreate(( TaskFunction_t) SG90_task,
+		 xReturn=xTaskCreate((TaskFunction_t )AS608_task,             
+                (const char*    )"AS608_task",           
+                (uint16_t       )AS608_STK_SIZE,        
+                (void*          )NULL,                  
+                (UBaseType_t    )AS608_TASK_PRIO,        
+                (TaskHandle_t*  )&AS608Task_Handler);						
+								
+		xReturn=xTaskCreate(( TaskFunction_t) SG90_task,
                             (const char *) "SG90_task",
                             (uint16_t)SG90_STK_SIZE,
                             (void *) NULL,
@@ -157,7 +185,7 @@ void LCD_task(void *pvParameters)
             if (err == 3)  // 输错 3 次
             {
                 LCD_ShowString(65, 100, 260, 16, 16, (u8 *)"LOCK 10 seconds");
-//								vTaskSuspend(SG90Task_Handler);
+								vTaskSuspend(SG90Task_Handler);
 
                 vTaskDelay(10000 / portTICK_PERIOD_MS); // **等待 10秒钟后解锁**
                 err = 0; // **解锁后允许用户输入**
@@ -168,6 +196,22 @@ void LCD_task(void *pvParameters)
 }
 
 
+void AS608_task(void *pvParameters)
+{
+  while(1)
+	{
+		extern uint8_t Numvalue[];
+		if((Numvalue[9] == 0) && (Numvalue[5] != 0))
+        {
+           xTaskNotifyGive(SG90Task_Handler); // 发送任务通知
+					  Numvalue[9] = 1;
+        }
+		  
+
+			     
+		}
+		vTaskDelay(100);
+}
 
 void SG90_task(void * pvParameters)
 {

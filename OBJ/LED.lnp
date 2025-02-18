@@ -16,6 +16,7 @@
 "..\obj\beep.o"
 "..\obj\pwm.o"
 "..\obj\servo.o"
+"..\obj\bsp_as608.o"
 "..\obj\delay.o"
 "..\obj\sys.o"
 "..\obj\usart.o"

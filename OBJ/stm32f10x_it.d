@@ -29,3 +29,6 @@
 ..\obj\stm32f10x_it.o: ..\STM32F10x_FWLib\inc\stm32f10x_usart.h
 ..\obj\stm32f10x_it.o: ..\STM32F10x_FWLib\inc\stm32f10x_wwdg.h
 ..\obj\stm32f10x_it.o: ..\STM32F10x_FWLib\inc\misc.h
+..\obj\stm32f10x_it.o: ..\HARDWARE\AS608\bsp_as608.h
+..\obj\stm32f10x_it.o: ..\SYSTEM\delay\delay.h
+..\obj\stm32f10x_it.o: ..\SYSTEM\sys\sys.h

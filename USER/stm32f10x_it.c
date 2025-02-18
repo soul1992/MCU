@@ -23,8 +23,9 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f10x_it.h" 
-
-
+#include "bsp_as608.h"
+uint8_t Numvalue[16]={0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15};
+uint8_t count=0;
  
 void NMI_Handler(void)
 {
@@ -78,6 +79,32 @@ void DebugMon_Handler(void)
 //void SysTick_Handler(void)
 //{
 //}
+
+void EXTIx_IRQHandler(void)
+{
+     /*确保是否产生了EXTI Line中断*/
+	if(EXTI_GetITStatus(EXTIx_LINE) != RESET) 
+	{
+        PS_Identify();
+        
+        EXTI_ClearITPendingBit(EXTIx_LINE);   
+    }
+}
+
+
+void USARTx_IRQHandler(void)
+{  
+    if(USART_GetITStatus(USARTx,USART_IT_RXNE) != RESET)
+    {
+        if(count>15)
+        {
+            count=0;
+        }
+        Numvalue[count] = USART_ReceiveData(USARTx);
+        count++; 
+
+    }      
+}
 
 /******************************************************************************/
 /*                 STM32F10x Peripherals Interrupt Handlers                   */
