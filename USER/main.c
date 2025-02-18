@@ -58,7 +58,7 @@ TaskHandle_t LCDTask_Handler;	//任务句柄
 void LCD_task(void *pvParameters);	//任务函数
 
 #define AS608_TASK_PRIO		2							//任务优先级
-#define AS608_STK_SIZE 		128  					//任务堆栈大小	
+#define AS608_STK_SIZE 		512  					//任务堆栈大小	
 TaskHandle_t AS608Task_Handler;					//任务句柄
 void AS608_task(void *pvParameters);		//任务函数
 
@@ -231,13 +231,9 @@ void SG90_task(void * pvParameters)
         Servo_SetAngle(0);
         
         // 清空LCD显示
-        LCD_ShowString(80, 150, 260, 16, 16, "              ");
+        LCD_ShowString(80, 120, 100, 16, 16, "                      ");
         
         // 延时一定时间以防止任务过度频繁运行
         vTaskDelay(100 / portTICK_PERIOD_MS); // 每100ms检查一次
     }
 }
-
-
-
-
