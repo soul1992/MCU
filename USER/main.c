@@ -1,17 +1,4 @@
-//#include "sys.h"
-//#include "delay.h"
-//#include "usart.h"
-//#include "led.h"
-//#include "beep.h"
-//#include "FreeRTOS.h"
-//#include "task.h"
-//#include "key.h"
-//#include "event_groups.h"
-//#include "lcd.h"
-//#include "touch.h"
-//#include "string.h"
-//#include "PWM.h"
-//#include "Servo.h"
+
 #include "sys.h"
 #include "delay.h"
 #include "string.h"
@@ -27,7 +14,7 @@
 #include "PWM.h"
 #include "Servo.h"
 #include "bsp_as608.h"
-
+#include "RC522.h"
  
 /***********************************************************************
  *※※※※※需要技术支持请添加微信phdd2024获取
@@ -46,26 +33,31 @@
  * 1.0       [zs]   	 	2025-02-08     		创建
  ***********************************************************************/
 
-#define START_TASK_PRIO				1				 	 //任务优先级
-#define START_STK_SIZE				128				 //任务堆栈大小
-TaskHandle_t StartTask_Handler;					 //任务句柄	
-void start_task(void *pvParameters);		 //任务函数
+#define START_TASK_PRIO				1				 	//任务优先级
+#define START_STK_SIZE				128				//任务堆栈大小
+TaskHandle_t StartTask_Handler;					//任务句柄	
+void start_task(void *pvParameters);		//任务函数
 
 
-#define LCD_TASK_PRIO		2		//任务优先级			
-#define LCD_STK_SIZE 		512  	//任务堆栈大小	
-TaskHandle_t LCDTask_Handler;	//任务句柄
-void LCD_task(void *pvParameters);	//任务函数
+#define LCD_TASK_PRIO		2								//任务优先级			
+#define LCD_STK_SIZE 		512  						//任务堆栈大小	
+TaskHandle_t LCDTask_Handler;						//任务句柄
+void LCD_task(void *pvParameters);			//任务函数
 
 #define AS608_TASK_PRIO		2							//任务优先级
 #define AS608_STK_SIZE 		512  					//任务堆栈大小	
 TaskHandle_t AS608Task_Handler;					//任务句柄
 void AS608_task(void *pvParameters);		//任务函数
 
-#define SG90_TASK_PRIO				3				 //任务优先级	
-#define SG90_STK_SIZE					128				 //任务堆栈大小
-TaskHandle_t SG90Task_Handler;					 //任务句柄	
-void SG90_task(void *p_arg);		 //任务函数
+#define RFID_TASK_PRIO		2							//任务优先级
+#define RFID_STK_SIZE 		512						//任务堆栈大小	
+TaskHandle_t RFIDTask_Handler;					//任务句柄
+void RFID_task(void *pvParameters);			//任务函数
+
+#define SG90_TASK_PRIO				3				 	//任务优先级	
+#define SG90_STK_SIZE					128				//任务堆栈大小
+TaskHandle_t SG90Task_Handler;					//任务句柄	
+void SG90_task(void *p_arg);		 				//任务函数
 
 const  u8* kbd_menu[15]={"mima"," : ","lock","1","2","3","4","5","6","7","8","9","DEL","0","Enter",};//按键表
  u8 key;
@@ -83,7 +75,9 @@ const  u8* kbd_menu[15]={"mima"," : ","lock","1","2","3","4","5","6","7","8","9"
 	LCD_Init();							//初始化LCD
 	Servo_Init();
   tp_dev.init();			//初始化触摸屏 
-	 Servo_SetAngle(0);
+	 
+	RC522_Init();
+	Servo_SetAngle(0);
 	if(!(tp_dev.touchtype&0x80))//如果是电阻屏
 	{
 		Chinese_Show_one(60,30,12,16,0);
@@ -142,14 +136,27 @@ void start_task(void *pvParameters)
                 (uint16_t       )LCD_STK_SIZE,        
                 (void*          )NULL,                  
                 (UBaseType_t    )LCD_TASK_PRIO,        
-                (TaskHandle_t*  )&LCDTask_Handler); 
+                (TaskHandle_t*  )&LCDTask_Handler);
+		if(xReturn==pdPASS)
+		printf("LCD_task任务创建成功\r\n");										
 	 
-		 xReturn=xTaskCreate((TaskFunction_t )AS608_task,             
+		xReturn=xTaskCreate((TaskFunction_t )AS608_task,             
                 (const char*    )"AS608_task",           
                 (uint16_t       )AS608_STK_SIZE,        
                 (void*          )NULL,                  
                 (UBaseType_t    )AS608_TASK_PRIO,        
-                (TaskHandle_t*  )&AS608Task_Handler);						
+                (TaskHandle_t*  )&AS608Task_Handler);
+		if(xReturn==pdPASS)
+		printf("AS608_task任务创建成功\r\n");								
+
+		xReturn=xTaskCreate((TaskFunction_t )RFID_task,             
+                (const char*    )"RFID_task",           
+                (uint16_t       )RFID_STK_SIZE,        
+                (void*          )NULL,                  
+                (UBaseType_t    )RFID_TASK_PRIO,        
+                (TaskHandle_t*  )&RFIDTask_Handler); 
+		if(xReturn==pdPASS)
+		printf("RFID_task任务创建成功\r\n");	
 								
 		xReturn=xTaskCreate(( TaskFunction_t) SG90_task,
                             (const char *) "SG90_task",
@@ -157,6 +164,8 @@ void start_task(void *pvParameters)
                             (void *) NULL,
                             (UBaseType_t) SG90_TASK_PRIO,
                             (TaskHandle_t *) &SG90Task_Handler);
+		if(xReturn==pdPASS)
+		printf("SG90_task任务创建成功\r\n");
 		
     vTaskDelete(StartTask_Handler); //删除开始任务
     taskEXIT_CRITICAL();            //退出临界区
@@ -216,6 +225,49 @@ void AS608_task(void *pvParameters)
         }
 				vTaskDelay(100 / portTICK_PERIOD_MS); // 避免 CPU 过载
 		}		
+}
+
+void RFID_task(void * pvParameters)
+{
+	
+   while(1)
+	 {
+	    if(shibieka())
+			{
+				 
+						Chinese_Show_two(80,120,16,16,0);
+            Chinese_Show_two(96,120,18,16,0);
+            Chinese_Show_two(112,120,20,16,0);
+					  Chinese_Show_two(128,120,8,16,0);
+            Chinese_Show_two(144,120,10,16,0);
+	       
+				xTaskNotifyGive(SG90Task_Handler); // 发送任务通知
+				printf("识别卡号成功\r\n");
+				
+			
+			}
+			else if(shibieka()==0)
+			{
+						Chinese_Show_two(80,120,16,16,0);
+            Chinese_Show_two(96,120,18,16,0);
+            Chinese_Show_two(112,120,20,16,0);
+						Chinese_Show_two(128,120,12,16,0);
+            Chinese_Show_two(144,120,14,16,0);
+			  printf("识别卡号失败\r\n");
+				err++;
+					if(err==3)
+					{
+					  vTaskSuspend(SG90Task_Handler);
+						printf("舵机任务挂起\r\n");
+						LCD_ShowString(0,100,260,16,16,(u8 *)"Task has been suspended");
+						vTaskDelay(2000 / portTICK_PERIOD_MS); // 每100ms检查一次
+						LCD_ShowString(0,100,260,16,16,(u8 *)"                       ");
+						
+					}			
+			}
+			
+	    vTaskDelay(100 / portTICK_PERIOD_MS); // 每100ms检查一次
+	 }
 }
 
 void SG90_task(void * pvParameters)

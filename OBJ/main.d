@@ -53,3 +53,4 @@
 ..\obj\main.o: ..\HARDWARE\SG90\PWM.h
 ..\obj\main.o: ..\HARDWARE\SG90\Servo.h
 ..\obj\main.o: ..\HARDWARE\AS608\bsp_as608.h
+..\obj\main.o: ..\HARDWARE\RC522\RC522.h

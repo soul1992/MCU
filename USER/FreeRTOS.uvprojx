@@ -340,7 +340,7 @@
               <MiscControls></MiscControls>
               <Define>STM32F10X_HD,USE_STDPERIPH_DRIVER</Define>
               <Undefine></Undefine>
-              <IncludePath>..\SYSTEM\delay;..\SYSTEM\sys;..\SYSTEM\usart;..\USER;..\STM32F10x_FWLib\inc;..\CORE;..\FreeRTOS\include;..\FreeRTOS\portable\RVDS\ARM_CM3;..\HARDWARE\24CXX;..\HARDWARE\IIC;..\HARDWARE\KEY;..\HARDWARE\LED;..\HARDWARE\TOUCH;..\HARDWARE\LCD;..\HARDWARE\BEEP;..\HARDWARE\SG90;..\HARDWARE\AS608</IncludePath>
+              <IncludePath>..\SYSTEM\delay;..\SYSTEM\sys;..\SYSTEM\usart;..\USER;..\STM32F10x_FWLib\inc;..\CORE;..\FreeRTOS\include;..\FreeRTOS\portable\RVDS\ARM_CM3;..\HARDWARE\24CXX;..\HARDWARE\IIC;..\HARDWARE\KEY;..\HARDWARE\LED;..\HARDWARE\TOUCH;..\HARDWARE\LCD;..\HARDWARE\BEEP;..\HARDWARE\SG90;..\HARDWARE\AS608;..\HARDWARE\RC522</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -478,6 +478,11 @@
               <FileName>bsp_as608.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\HARDWARE\AS608\bsp_as608.c</FilePath>
+            </File>
+            <File>
+              <FileName>RC522.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\HARDWARE\RC522\RC522.c</FilePath>
             </File>
           </Files>
         </Group>
