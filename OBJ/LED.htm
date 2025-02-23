@@ -3,7 +3,7 @@
 <title>Static Call Graph - [..\OBJ\LED.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image ..\OBJ\LED.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060960: Last Updated: Sun Feb 23 21:13:12 2025
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060960: Last Updated: Mon Feb 24 00:13:42 2025
 <BR><P>
 <H3>Maximum Stack Usage =        416 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -327,14 +327,14 @@ Global Symbols
 <BR>[Address Reference Count : 1]<UL><LI> main.o(.text)
 </UL>
 <P><STRONG><a name="[75]"></a>RFID_task</STRONG> (Thumb, 268 bytes, Stack size 16 bytes, main.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 232 + Unknown Stack Size
-<LI>Call Chain = RFID_task &rArr; shibieka &rArr; delay_ms &rArr; vTaskDelay &rArr; xTaskResumeAll &rArr; xTaskIncrementTick &rArr; __2printf &rArr; _printf_char_file &rArr; _printf_char_common &rArr; __printf
+<BR><BR>[Stack]<UL><LI>Max Depth = 208 + Unknown Stack Size
+<LI>Call Chain = RFID_task &rArr; vTaskDelay &rArr; xTaskResumeAll &rArr; xTaskIncrementTick &rArr; __2printf &rArr; _printf_char_file &rArr; _printf_char_common &rArr; __printf
 </UL>
 <BR>[Calls]<UL><LI><a href="#[78]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;xTaskGenericNotify
 <LI><a href="#[7a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vTaskSuspend
 <LI><a href="#[73]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vTaskDelay
-<LI><a href="#[76]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;shibieka
 <LI><a href="#[74]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LCD_ShowString
+<LI><a href="#[76]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GET_CARD
 <LI><a href="#[77]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Chinese_Show_two
 <LI><a href="#[79]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2printf
 </UL>
@@ -1579,7 +1579,7 @@ Global Symbols
 <LI><a href="#[10e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;WriteRawRC
 </UL>
 <BR>[Called By]<UL><LI><a href="#[122]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IC_CMT
-<LI><a href="#[76]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;shibieka
+<LI><a href="#[76]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GET_CARD
 </UL>
 
 <P><STRONG><a name="[11a]"></a>PcdAnticoll</STRONG> (Thumb, 114 bytes, Stack size 48 bytes, rc522.o(.text))
@@ -1591,7 +1591,7 @@ Global Symbols
 <LI><a href="#[10e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;WriteRawRC
 </UL>
 <BR>[Called By]<UL><LI><a href="#[122]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IC_CMT
-<LI><a href="#[76]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;shibieka
+<LI><a href="#[76]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GET_CARD
 </UL>
 
 <P><STRONG><a name="[11b]"></a>CalulateCRC</STRONG> (Thumb, 102 bytes, Stack size 24 bytes, rc522.o(.text))
@@ -1616,7 +1616,7 @@ Global Symbols
 <LI><a href="#[113]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ClearBitMask
 </UL>
 <BR>[Called By]<UL><LI><a href="#[122]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IC_CMT
-<LI><a href="#[76]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;shibieka
+<LI><a href="#[76]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GET_CARD
 </UL>
 
 <P><STRONG><a name="[11d]"></a>PcdAuthState</STRONG> (Thumb, 80 bytes, Stack size 40 bytes, rc522.o(.text), UNUSED)
@@ -1662,15 +1662,12 @@ Global Symbols
 <BR><BR>[Calls]<UL><LI><a href="#[79]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2printf
 </UL>
 
-<P><STRONG><a name="[76]"></a>shibieka</STRONG> (Thumb, 118 bytes, Stack size 8 bytes, rc522.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 216 + Unknown Stack Size
-<LI>Call Chain = shibieka &rArr; delay_ms &rArr; vTaskDelay &rArr; xTaskResumeAll &rArr; xTaskIncrementTick &rArr; __2printf &rArr; _printf_char_file &rArr; _printf_char_common &rArr; __printf
+<P><STRONG><a name="[76]"></a>GET_CARD</STRONG> (Thumb, 90 bytes, Stack size 8 bytes, rc522.o(.text))
+<BR><BR>[Stack]<UL><LI>Max Depth = 176<LI>Call Chain = GET_CARD &rArr; PcdAnticoll &rArr; PcdComMF522 &rArr; ClearBitMask &rArr; ReadRawRC &rArr; SPI_RC522_ReadByte &rArr; delay_us
 </UL>
 <BR>[Calls]<UL><LI><a href="#[11c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PcdSelect
 <LI><a href="#[11a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PcdAnticoll
 <LI><a href="#[119]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PcdRequest
-<LI><a href="#[a0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;delay_ms
-<LI><a href="#[79]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2printf
 </UL>
 <BR>[Called By]<UL><LI><a href="#[75]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RFID_task
 </UL>
@@ -1736,7 +1733,6 @@ Global Symbols
 <LI><a href="#[d7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;FT5206_Init
 <LI><a href="#[9f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AT24CXX_WriteOneByte
 <LI><a href="#[92]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PS_Identify
-<LI><a href="#[76]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;shibieka
 <LI><a href="#[5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TP_Adjust
 <LI><a href="#[89]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LCD_Init
 <LI><a href="#[8c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;KEY_Scan
@@ -3484,7 +3480,6 @@ Global Symbols
 <LI><a href="#[73]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vTaskDelay
 <LI><a href="#[83]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortExitCritical
 <LI><a href="#[80]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vPortEnterCritical
-<LI><a href="#[76]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;shibieka
 <LI><a href="#[89]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LCD_Init
 <LI><a href="#[7d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Acquisition_Number
 <LI><a href="#[7f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;start_task

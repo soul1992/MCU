@@ -232,7 +232,7 @@ void RFID_task(void * pvParameters)
 	
    while(1)
 	 {
-	    if(shibieka())
+	    if(GET_CARD())
 			{
 				 
 						Chinese_Show_two(80,120,16,16,0);
@@ -246,7 +246,7 @@ void RFID_task(void * pvParameters)
 				
 			
 			}
-			else if(shibieka()==0)
+			else if(GET_CARD()==0)
 			{
 						Chinese_Show_two(80,120,16,16,0);
             Chinese_Show_two(96,120,18,16,0);

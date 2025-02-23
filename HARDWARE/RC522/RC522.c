@@ -12,8 +12,8 @@
 unsigned char status;
 unsigned char ID[4];
 unsigned char CT[2];//卡类型0
-unsigned char kahao1[4] = {0x43, 0xD4, 0x61, 0x11};
-//unsigned char kahao1[4] = {0x47, 0x78, 0x2F, 0x63};
+unsigned char CardNumber[4] = {0x43, 0xD4, 0x61, 0x11};
+//unsigned char CardNumber[4] = {0x47, 0x78, 0x2F, 0x63};
 u8  KEY[6] = { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
  char cStr[4];
 
@@ -758,14 +758,13 @@ void ShowID(unsigned char *p)	 //显示卡的卡号，以十六进制显示
     printf("ID>>>%s\r\n", num);
 }
 
-u8 shibieka(void)
+u8 GET_CARD(void)
 {
 	while(1)
 	{
 	    status = PcdRequest( PICC_REQALL, CT );                /* 寻卡 */
      if ( status != MI_OK )                                  /* 寻卡成功 */
      {
-      
       continue;
      }
      status = PcdAnticoll( ID );                             /* 防冲撞 */
@@ -774,17 +773,11 @@ u8 shibieka(void)
      if ( status != MI_OK )                                  /*选定卡片成功 */
      { 
         
-    if(ID[0]==kahao1[ 0 ]&&ID[ 1 ]==kahao1[ 1 ]&&ID[ 2 ]==kahao1[ 2 ]&&ID[ 3 ]==kahao1[ 3 ])
+    if(ID[0]==CardNumber[ 0 ]&&ID[ 1 ]==CardNumber[ 1 ]&&ID[ 2 ]==CardNumber[ 2 ]&&ID[ 3 ]==CardNumber[ 3 ])
 		{
-		  printf("ok\r\n");
-			
-			delay_ms(1000);
 			return 1;
 		}
 		else
-			printf("no\r\n");
-		  
-			delay_ms(1000);
 		  return 0;
 		}
 		
