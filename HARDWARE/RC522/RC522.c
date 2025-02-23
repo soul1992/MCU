@@ -769,21 +769,10 @@ u8 shibieka(void)
       continue;
      }
      status = PcdAnticoll( ID );                             /* 防冲撞 */
-//     if ( status != MI_OK )                                  /* 防冲撞成功 */
-//     {
-//      ShowID(ID);
-//     
-//     }
      
      status = PcdSelect( ID );                               /*选定卡片 */
      if ( status != MI_OK )                                  /*选定卡片成功 */
      { 
-//       sprintf ( cStr, "%02X%02X%02X%02X",
-//               ID [ 0 ],
-//               ID [ 1 ],
-//               ID [ 2 ], 
-//               ID [ 3 ] );
-//         printf("%s\r\n",cStr);
         
     if(ID[0]==kahao1[ 0 ]&&ID[ 1 ]==kahao1[ 1 ]&&ID[ 2 ]==kahao1[ 2 ]&&ID[ 3 ]==kahao1[ 3 ])
 		{
